@@ -7,49 +7,49 @@
 <meta name="description" content="Criamos sites e agentes de IA que atendem seu cliente no WhatsApp e Instagram 24h. Campo Grande/MS.">
 <link rel="icon" type="image/jpeg" href="revoluzzione-logo.jpg">
 <style>
-  :root{--navy:#101736;--gold:#d9a62e;--ink:#1c2333;--soft:#f6f7fb;}
+  :root{--navy:#0B1F44;--brand:#5C9DDF;--brand-esc:#2F6DB5;--ink:#1B2A45;--soft:#EEF3FA;}
   *{margin:0;padding:0;box-sizing:border-box}
   body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);line-height:1.6}
   .wrap{max-width:1000px;margin:0 auto;padding:0 20px}
   /* HERO */
-  header{background:radial-gradient(1200px 600px at 80% -10%,#2a3a75 0%,var(--navy) 55%,#070b18 100%);color:#fff;padding:60px 0}
+  header{background:radial-gradient(1200px 600px at 80% -10%,#1D4E9E 0%,#0A1E45 55%,#030710 100%);color:#fff;padding:60px 0}
   .logo-tile{display:inline-block;background:#fff;border-radius:22px;padding:12px;margin-bottom:22px;box-shadow:0 12px 34px rgba(0,0,0,.35);line-height:0}
   .logo-tile img{display:block;width:min(200px,56vw);height:auto;border-radius:14px}
-  .badge{display:inline-block;border:1px solid rgba(217,166,46,.6);color:var(--gold);font-size:.8rem;padding:4px 14px;border-radius:20px;margin-bottom:18px}
+  .badge{display:inline-block;border:1px solid rgba(92,157,223,.5);color:var(--brand);font-size:.8rem;padding:4px 14px;border-radius:20px;margin-bottom:18px}
   h1{font-size:clamp(1.7rem,4.5vw,2.7rem);line-height:1.2;margin-bottom:14px}
-  h1 span{color:var(--gold)}
+  h1 span{color:var(--brand)}
   .sub{font-size:1.05rem;color:#cfd6ea;max-width:640px}
-  .cta{display:inline-block;background:var(--gold);color:#1c2333;font-weight:700;text-decoration:none;padding:14px 28px;border-radius:10px;margin-top:24px;font-size:1.05rem}
-  .cta:hover{background:#e8b93f}
+  .cta{display:inline-block;background:var(--brand);color:#1c2333;font-weight:700;text-decoration:none;padding:14px 28px;border-radius:10px;margin-top:24px;font-size:1.05rem}
+  .cta:hover{background:#4B8ED6}
   .cta2{display:inline-block;border:1px solid #4a578f;color:#dfe5f7;text-decoration:none;padding:13px 26px;border-radius:10px;margin:24px 0 0 10px;font-size:1rem}
   section{padding:56px 0}
   section h2{font-size:1.6rem;margin-bottom:10px}
-  .kicker{color:var(--gold);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:.8rem}
+  .kicker{color:var(--brand);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:.8rem}
   .lead{color:#55607a;max-width:720px;margin-bottom:28px}
   .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
   .card{background:#fff;border:1px solid #e4e7f0;border-radius:14px;padding:24px}
   .card h3{font-size:1.1rem;margin-bottom:8px}
   .card p{color:#55607a;font-size:.95rem}
-  .gold{color:var(--gold)}
+  .gold{color:var(--brand)}
   /* pacotes */
   .plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:18px;align-items:stretch}
   .plan{background:#fff;border:1px solid #e4e7f0;border-radius:16px;padding:26px;display:flex;flex-direction:column}
-  .plan.destaque{border:2px solid var(--gold);box-shadow:0 12px 30px rgba(16,23,54,.12)}
-  .plan .tag{font-size:.72rem;font-weight:800;letter-spacing:.06em;color:#fff;background:var(--gold);border-radius:6px;padding:3px 10px;align-self:flex-start;margin-bottom:10px}
+  .plan.destaque{border:2px solid var(--brand);box-shadow:0 12px 30px rgba(16,23,54,.12)}
+  .plan .tag{font-size:.72rem;font-weight:800;letter-spacing:.06em;color:#fff;background:#2F6DB5;border-radius:6px;padding:3px 10px;align-self:flex-start;margin-bottom:10px}
   .plan h3{font-size:1.15rem}
   .preco{margin:14px 0}
   .preco b{font-size:1.6rem}
   .preco small{color:#77809a}
   .plan ul{list-style:none;margin-bottom:20px;flex:1}
   .plan li{padding:5px 0 5px 22px;position:relative;font-size:.93rem}
-  .plan li:before{content:"✓";position:absolute;left:0;color:var(--gold);font-weight:700}
+  .plan li:before{content:"✓";position:absolute;left:0;color:var(--brand);font-weight:700}
   .btn{border-radius:9px;text-align:center;padding:12px;font-weight:600;text-decoration:none;display:block}
-  .btn.gold{background:var(--gold);color:#1c2333}
+  .btn.gold{background:var(--brand);color:#1c2333}
   .btn.ghost{border:1.5px solid #c9cedd;color:var(--navy)}
   /* como funciona */
   .passos{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
   .passo{background:var(--soft);border-radius:14px;padding:22px}
-  .passo .n{font-size:1.5rem;font-weight:800;color:var(--gold)}
+  .passo .n{font-size:1.5rem;font-weight:800;color:var(--brand)}
   .passo b{display:block;margin:6px 0 4px}
   .passo p{font-size:.9rem;color:#55607a}
   /* sobre/faq */
@@ -57,7 +57,7 @@
   .faq details{background:#fff;border:1px solid #e4e7f0;border-radius:10px;padding:14px 18px;margin-bottom:10px}
   .faq summary{font-weight:600;cursor:pointer}
   .faq p{color:#55607a;font-size:.93rem;margin-top:8px}
-  footer{background:#070b18;color:#9aa3c0;padding:36px 0;text-align:center;font-size:.9rem}
+  footer{background:#030710;color:#9aa3c0;padding:36px 0;text-align:center;font-size:.9rem}
   footer b{color:#fff}
   @media(max-width:560px){.cta2{margin-left:0}}
 </style>
