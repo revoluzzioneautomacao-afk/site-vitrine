@@ -3,60 +3,76 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#011C51">
 <title>Revoluzzione — Sites & Agentes de IA para o seu negócio</title>
 <meta name="description" content="Criamos sites e agentes de IA que atendem seu cliente no WhatsApp e Instagram 24h. Campo Grande/MS.">
 <link rel="icon" type="image/png" href="favicon.png">
 <style>
-  :root{--navy:#0B1F44;--brand:#5C9DDF;--brand-esc:#2F6DB5;--ink:#1B2A45;--soft:#EEF3FA;}
+  :root{
+    --bg0:#01081D;            /* fundo principal */
+    --bg1:#010B24;            /* seção alternada */
+    --card:#011432;           /* cartões */
+    --card2:#011C51;          /* destaque elevado */
+    --line:#1A3B74;           /* bordas */
+    --txt:#EAF1FD;            /* texto principal */
+    --txt2:#A9BCE0;           /* texto secundário */
+    --azul:#3B95E1;           /* azul da marca */
+    --azul-h:#55A8F0;         /* hover */
+    --azul-cl:#7DC0FF;        /* destaque claro */
+    --azul-esc:#010C23;       /* texto sobre azul */
+  }
   *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);line-height:1.6}
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg0);color:var(--txt);line-height:1.6}
   .wrap{max-width:1000px;margin:0 auto;padding:0 20px}
   /* HERO */
-  header{background:radial-gradient(1200px 600px at 80% -10%,#1D4E9E 0%,#0A1E45 55%,#030710 100%);color:#fff;padding:60px 0}
-  .logo-hero{display:block;margin:0 auto 28px;width:min(400px,86vw);height:auto;filter:drop-shadow(0 10px 28px rgba(0,0,0,.45))}
-  .badge{display:inline-block;border:1px solid rgba(92,157,223,.5);color:var(--brand);font-size:.8rem;padding:4px 14px;border-radius:20px;margin-bottom:18px}
-  h1{font-size:clamp(1.7rem,4.5vw,2.7rem);line-height:1.2;margin-bottom:14px}
-  h1 span{color:var(--brand)}
-  .sub{font-size:1.05rem;color:#cfd6ea;max-width:640px}
-  .cta{display:inline-block;background:var(--brand);color:#0B1F44;font-weight:700;text-decoration:none;padding:14px 28px;border-radius:10px;margin-top:24px;font-size:1.05rem}
-  .cta:hover{background:#4B8ED6}
-  .cta2{display:inline-block;border:1px solid #4a578f;color:#dfe5f7;text-decoration:none;padding:13px 26px;border-radius:10px;margin:24px 0 0 10px;font-size:1rem}
+  header{background:radial-gradient(1200px 620px at 80% -10%,#0E3E8F 0%,#011C51 48%,#010719 100%);color:#fff;padding:56px 0}
+  .logo-hero{display:block;margin:0 auto 26px;width:min(400px,86vw);height:auto;filter:drop-shadow(0 10px 30px rgba(0,0,0,.5))}
+  h1{font-size:clamp(1.7rem,4.5vw,2.7rem);line-height:1.2;margin-bottom:14px;text-align:center}
+  h1 span{color:var(--azul-cl)}
+  .sub{font-size:1.05rem;color:#B7C8E8;max-width:680px;margin:0 auto;text-align:center}
+  .ctas{text-align:center}
+  .cta{display:inline-block;background:var(--azul);color:var(--azul-esc);font-weight:700;text-decoration:none;padding:14px 28px;border-radius:10px;margin-top:24px;font-size:1.05rem}
+  .cta:hover{background:var(--azul-h)}
+  .cta2{display:inline-block;border:1px solid #2E5C9E;color:#D6E6FF;text-decoration:none;padding:13px 26px;border-radius:10px;margin:24px 0 0 10px;font-size:1rem}
+  .cta2:hover{border-color:var(--azul);color:#fff}
   section{padding:56px 0}
   section h2{font-size:1.6rem;margin-bottom:10px}
-  .kicker{color:var(--brand);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:.8rem}
-  .lead{color:#55607a;max-width:720px;margin-bottom:28px}
+  .kicker{color:var(--azul);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:.8rem}
+  .lead{color:var(--txt2);max-width:720px;margin-bottom:28px}
+  .sobre{background:var(--bg1)}
   .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
-  .card{background:#fff;border:1px solid #e4e7f0;border-radius:14px;padding:24px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px}
   .card h3{font-size:1.1rem;margin-bottom:8px}
-  .card p{color:#55607a;font-size:.95rem}
-  .gold{color:var(--brand)}
+  .card p{color:var(--txt2);font-size:.95rem}
   /* pacotes */
   .plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:18px;align-items:stretch}
-  .plan{background:#fff;border:1px solid #e4e7f0;border-radius:16px;padding:26px;display:flex;flex-direction:column}
-  .plan.destaque{border:2px solid var(--brand);box-shadow:0 12px 30px rgba(16,23,54,.12)}
-  .plan .tag{font-size:.72rem;font-weight:800;letter-spacing:.06em;color:#fff;background:#2F6DB5;border-radius:6px;padding:3px 10px;align-self:flex-start;margin-bottom:10px}
+  .plan{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px;display:flex;flex-direction:column}
+  .plan.destaque{border:1.5px solid var(--azul);box-shadow:0 14px 40px rgba(59,149,225,.22)}
+  .plan .tag{font-size:.72rem;font-weight:800;letter-spacing:.06em;color:var(--azul-esc);background:var(--azul);border-radius:6px;padding:3px 10px;align-self:flex-start;margin-bottom:10px}
   .plan h3{font-size:1.15rem}
   .preco{margin:14px 0}
   .preco b{font-size:1.6rem}
-  .preco small{color:#77809a}
+  .preco small{color:#8FA6CC}
   .plan ul{list-style:none;margin-bottom:20px;flex:1}
   .plan li{padding:5px 0 5px 22px;position:relative;font-size:.93rem}
-  .plan li:before{content:"✓";position:absolute;left:0;color:var(--brand);font-weight:700}
+  .plan li:before{content:"✓";position:absolute;left:0;color:var(--azul);font-weight:700}
   .btn{border-radius:9px;text-align:center;padding:12px;font-weight:600;text-decoration:none;display:block}
-  .btn.gold{background:var(--brand);color:#0B1F44}
-  .btn.ghost{border:1.5px solid #c9cedd;color:var(--navy)}
+  .btn.gold{background:var(--azul);color:var(--azul-esc)}
+  .btn.gold:hover{background:var(--azul-h)}
+  .btn.ghost{border:1.5px solid #2E5C9E;color:#D6E6FF}
+  .btn.ghost:hover{border-color:var(--azul);color:#fff}
+  .nota{color:#8FA6CC;font-size:.9rem;margin-top:18px}
   /* como funciona */
   .passos{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
-  .passo{background:var(--soft);border-radius:14px;padding:22px}
-  .passo .n{font-size:1.5rem;font-weight:800;color:var(--brand)}
+  .passo{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px}
+  .passo .n{font-size:1.5rem;font-weight:800;color:var(--azul)}
   .passo b{display:block;margin:6px 0 4px}
-  .passo p{font-size:.9rem;color:#55607a}
-  /* sobre/faq */
-  .sobre{background:var(--soft)}
-  .faq details{background:#fff;border:1px solid #e4e7f0;border-radius:10px;padding:14px 18px;margin-bottom:10px}
+  .passo p{font-size:.9rem;color:var(--txt2)}
+  /* faq */
+  .faq details{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin-bottom:10px}
   .faq summary{font-weight:600;cursor:pointer}
-  .faq p{color:#55607a;font-size:.93rem;margin-top:8px}
-  footer{background:#030710;color:#9aa3c0;padding:36px 0;text-align:center;font-size:.9rem}
+  .faq p{color:var(--txt2);font-size:.93rem;margin-top:8px}
+  footer{background:#010209;color:#7E93B8;padding:36px 0;text-align:center;font-size:.9rem;border-top:1px solid #0E2547}
   footer b{color:#fff}
   @media(max-width:560px){.cta2{margin-left:0}}
 </style>
@@ -68,8 +84,10 @@
     <img class="logo-hero" src="revoluzzione-logo-dark.png" alt="Revoluzzione — Sites, Automação e Agentes de IA">
     <h1>Seu site deixa de ser cartaz.<br>Vira um <span>vendedor 24 horas</span>.</h1>
     <p class="sub">Criamos sites + agentes de IA que atendem, qualificam e convertem seus clientes no <b>WhatsApp e Instagram</b>, em Campo Grande/MS e região — com memória do seu negócio. Sem mensalidade de software caro: sistema sob medida, sem depender de desenvolvedor.</p>
-    <a class="cta" href="https://wa.me/5567991355654?text=Ol%C3%A1%2C%20Revoluzzione!%20Vi%20o%20site%20e%20quero%20saber%20mais%20sobre%20sites%20e%20agentes%20de%20IA.">Falar no WhatsApp →</a>
-    <a class="cta2" href="#pacotes">Ver pacotes</a>
+    <div class="ctas">
+      <a class="cta" href="https://wa.me/5567991355654?text=Ol%C3%A1%2C%20Revoluzzione!%20Vi%20o%20site%20e%20quero%20saber%20mais%20sobre%20sites%20e%20agentes%20de%20IA.">Falar no WhatsApp →</a>
+      <a class="cta2" href="#pacotes">Ver pacotes</a>
+    </div>
   </div>
 </header>
 
@@ -129,7 +147,7 @@
         <a class="btn ghost" href="https://wa.me/5567991355654?text=Quero%20entender%20o%20pacote%20SOB%20MEDIDA">Quero esse</a>
       </div>
     </div>
-    <p style="margin-top:18px;font-size:.9rem;color:#55607a">💡 Precisa de só uma parte? Página de apresentação, agente de Instagram ou manutenção de site também são vendidos separados. Chama no WhatsApp.</p>
+    <p class="nota">💡 Precisa de só uma parte? Página de apresentação, agente de Instagram ou manutenção de site são vendidos separados. Chama no WhatsApp.</p>
   </div>
 </section>
 
