@@ -83,6 +83,36 @@
   .big{font-size:clamp(26px,4vw,42px)}
   footer{border-top:1px solid var(--linha);padding:36px 0 44px;font-size:13px;color:var(--corpo)}
   .muted{opacity:.75}
+  /* ===== upgrade premium (estilo skiper-ui, sem framework) ===== */
+  #progress{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,#3B95E1,#61D9FF);z-index:200}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+  header .wrap>*{animation:fadeUp .8s cubic-bezier(.2,.7,.2,1) both}
+  header .wrap>*:nth-child(1){animation-delay:.05s}
+  header .wrap>*:nth-child(2){animation-delay:.15s}
+  header .wrap>*:nth-child(3){animation-delay:.25s}
+  header .wrap>*:nth-child(4){animation-delay:.35s}
+  header .wrap>*:nth-child(5){animation-delay:.45s}
+  .hlt{background:linear-gradient(90deg,#61D9FF,#3B95E1);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .btn{position:relative;overflow:hidden;transform:translateZ(0)}
+  .btn::after{content:"";position:absolute;top:0;left:-120%;width:55%;height:100%;background:linear-gradient(115deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);transition:left .65s ease}
+  .btn:hover::after{left:135%}
+  .btn:active{transform:scale(.97)}
+  .card{position:relative;overflow:hidden;transition:transform .35s ease,border-color .35s ease,box-shadow .35s ease}
+  .card::before{content:"";position:absolute;inset:0;opacity:0;transition:opacity .35s;background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),rgba(97,217,255,.13),transparent 65%);pointer-events:none}
+  .card:hover::before{opacity:1}
+  .card:hover{transform:translateY(-6px);border-color:rgba(97,217,255,.5);box-shadow:0 24px 50px -28px rgba(0,0,0,.8)}
+  .marquee{overflow:hidden;border-top:1px solid var(--linha);border-bottom:1px solid var(--linha);padding:15px 0;background:rgba(10,20,40,.5);-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+  .mq-track{display:flex;width:max-content;animation:mq 30s linear infinite}
+  .mq-track:hover{animation-play-state:paused}
+  .mq-item{display:flex;align-items:center;gap:22px;padding-right:22px;font-size:14.5px;letter-spacing:.14em;font-weight:700;color:var(--corpo);white-space:nowrap}
+  .mq-item b{color:var(--acc);font-weight:800}
+  .mq-item .dot{color:var(--acc);opacity:.5}
+  @keyframes mq{to{transform:translateX(-50%)}}
+  .rv{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+  .rv.in{opacity:1;transform:none}
+  .badge15{animation:softPulse 3.2s ease-in-out infinite}
+  @keyframes softPulse{0%,100%{box-shadow:0 0 0 0 rgba(97,217,255,0)}50%{box-shadow:0 0 26px 2px rgba(97,217,255,.3)}}
+  @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.rv{opacity:1;transform:none}}
   .linkrow{display:flex;flex-wrap:wrap;gap:26px;margin-top:18px}
   .badge15{display:inline-block;border:1px solid var(--acc);color:var(--acc);border-radius:99px;padding:6px 16px;font-size:12px;font-weight:700;letter-spacing:.1em;margin-top:22px}
   @media(max-width:900px){
@@ -94,6 +124,7 @@
 </style>
 </head>
 <body>
+<div id="progress" aria-hidden="true"></div>
 
 <nav>
   <div class="wrap">
@@ -119,7 +150,7 @@
   <div class="brilho roxo" style="bottom:-180px;left:-140px"></div>
   <div class="wrap">
     <div class="label">Sites · Automação · Agentes de IA — Campo Grande/MS</div>
-    <h1>Tecnologia que trabalha antes do seu concorrente.</h1>
+    <h1>Tecnologia que trabalha <span class="hlt">antes do seu concorrente</span>.</h1>
     <p class="sub">Sites, automação e agentes de IA desenhados para transformar atendimento em operação — seu cliente respondido na hora, 24 horas por dia.</p>
     <div style="margin-top:32px;display:flex;gap:14px;flex-wrap:wrap">
       <a class="btn" href="https://wa.me/5567991355654?text=Ol%C3%A1%2C%20Revoluzzione!%20Quero%20um%20diagn%C3%B3stico%20gratuito">Falar no WhatsApp</a>
@@ -135,6 +166,14 @@
     </div>
   </div>
 </header>
+
+<!-- MARQUEE -->
+<div class="marquee" aria-hidden="true">
+  <div class="mq-track">
+    <div class="mq-item"><b>REVOLUZZIONE</b><span class="dot">•</span>Sites<span class="dot">•</span>Automação<span class="dot">•</span>Agentes de IA<span class="dot">•</span>Atendimento 24h<span class="dot">•</span>WhatsApp<span class="dot">•</span>Instagram<span class="dot">•</span>Sem programador<span class="dot">•</span>15 dias de teste<span class="dot">•</span></div>
+    <div class="mq-item"><b>REVOLUZZIONE</b><span class="dot">•</span>Sites<span class="dot">•</span>Automação<span class="dot">•</span>Agentes de IA<span class="dot">•</span>Atendimento 24h<span class="dot">•</span>WhatsApp<span class="dot">•</span>Instagram<span class="dot">•</span>Sem programador<span class="dot">•</span>15 dias de teste<span class="dot">•</span></div>
+  </div>
+</div>
 
 <!-- PROBLEMA -->
 <section id="problema" style="padding-top:0">
@@ -274,5 +313,40 @@
   </div>
 </footer>
 
+<script>
+(function () {
+  // barra de progresso de leitura
+  var prog = document.getElementById('progress'), tick = false;
+  function up() {
+    var s = document.documentElement;
+    var h = s.scrollHeight - s.clientHeight || 1;
+    prog.style.width = ((s.scrollTop || document.body.scrollTop) / h * 100) + '%';
+    tick = false;
+  }
+  addEventListener('scroll', function () { if (!tick) { tick = true; requestAnimationFrame(up); } }, { passive: true });
+  addEventListener('resize', up);
+  up();
+  // revelação ao rolar (cards, passos, títulos)
+  var io = ('IntersectionObserver' in window) ? new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 }) : null;
+  var alvos = document.querySelectorAll('.grid3 > *, .grid2 > *, .passo, .marquee, section h2, section > .wrap > .sub');
+  [].forEach.call(alvos, function (el) {
+    if (el.closest('header')) return;
+    el.classList.add('rv');
+    var pos = [].indexOf.call(el.parentElement.children, el);
+    el.style.transitionDelay = ((pos % 3) * 90) + 'ms';
+    if (io) io.observe(el);
+  });
+  // brilho que segue o mouse nos cards
+  [].forEach.call(document.querySelectorAll('.card'), function (c) {
+    c.addEventListener('pointermove', function (ev) {
+      var r = c.getBoundingClientRect();
+      c.style.setProperty('--mx', (ev.clientX - r.left) + 'px');
+      c.style.setProperty('--my', (ev.clientY - r.top) + 'px');
+    });
+  });
+})();
+</script>
 </body>
 </html>
