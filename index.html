@@ -27,8 +27,11 @@
   .nav-links a:hover{color:var(--tit)}
   .btn{display:inline-block;background:var(--acc);color:#04101f!important;font-weight:700;padding:11px 20px;border-radius:8px;font-size:14px;transition:.2s}
   .btn:hover{filter:brightness(1.1)}
-  .btn-ig{display:inline-flex;align-items:center;gap:9px;text-decoration:none}
-  .btn-ig svg{flex:none}
+  .btn-ig,.btn-wa{display:inline-flex;align-items:center;gap:9px;text-decoration:none}
+  .btn-ig svg,.btn-wa svg{flex:none}
+  .btn-out:hover{background:rgba(97,217,255,.12);border-color:var(--acc)}
+  .btn svg{transition:transform .25s ease}
+  .btn:hover svg{transform:translateY(-1px) scale(1.08)}
   .btn-out{background:transparent;color:var(--acc)!important;border:1.5px solid var(--acc)}
   /* Camadas de arte futurista — dissolvidas no fundo (fade + blend), na paleta da marca */
   section,header{position:relative}
@@ -150,7 +153,10 @@
       <a href="#como">Como funciona</a>
       <a href="#pacotes">Pacotes</a>
       <a href="#contato">Contato</a>
-      <a class="btn" href="https://wa.me/5567991355654?text=Ol%C3%A1%2C%20Revoluzzione!%20Quero%20um%20diagn%C3%B3stico%20gratuito">Diagnóstico gratuito</a>
+      <a class="btn btn-wa" href="https://wa.me/5567991355654?text=Ol%C3%A1%2C%20Revoluzzione!%20Quero%20um%20diagn%C3%B3stico%20gratuito">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+        <span>Diagnóstico gratuito</span>
+      </a>
       <a class="btn btn-out btn-ig" style="padding:11px 14px" href="https://www.instagram.com/revoluzzione.automacao/" target="_blank" rel="noopener" aria-label="Instagram da Revoluzzione">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
         <span>Instagram</span>
@@ -170,7 +176,10 @@
     <h1>Tecnologia que trabalha <span class="hlt">antes do seu concorrente</span>.</h1>
     <p class="sub">Sites, automação e agentes de IA desenhados para transformar atendimento em operação — seu cliente respondido na hora, 24 horas por dia.</p>
     <div style="margin-top:32px;display:flex;gap:14px;flex-wrap:wrap">
-      <a class="btn" href="https://wa.me/5567991355654?text=Ol%C3%A1%2C%20Revoluzzione!%20Quero%20um%20diagn%C3%B3stico%20gratuito">Falar no WhatsApp</a>
+      <a class="btn btn-wa" href="https://wa.me/5567991355654?text=Ol%C3%A1%2C%20Revoluzzione!%20Quero%20um%20diagn%C3%B3stico%20gratuito">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+        <span>Falar no WhatsApp</span>
+      </a>
       <a class="btn btn-out btn-ig" href="https://www.instagram.com/revoluzzione.automacao/" target="_blank" rel="noopener">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
         <span>Seguir no Instagram</span>
@@ -278,20 +287,29 @@
         <h3>Essencial</h3>
         <div class="preco">R$ 1.500<small>+ R$ 297/mês</small></div>
         <p class="desc">Site institucional com página de apresentação e atendente de IA no WhatsApp. Domínio e hospedagem inclusos.</p>
-        <a class="btn btn-out" style="margin-top:18px" href="https://wa.me/5567991355654?text=Ol%C3%A1%2C%20quero%20saber%20mais%20do%20pacote%20Essencial">Quero esse</a>
+        <a class="btn btn-out btn-wa" style="margin-top:18px" href="https://wa.me/5567991355654?text=Ol%C3%A1%2C%20quero%20saber%20mais%20do%20pacote%20Essencial">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+          <span>Quero esse</span>
+        </a>
       </div>
       <div class="card pacote dest">
         <span class="tag">MAIS ESCOLHIDO</span>
         <h3>Completo</h3>
         <div class="preco">R$ 3.500<small>+ R$ 697/mês</small></div>
         <p class="desc">Site com captura de contatos, agente multi-canal (WhatsApp, Instagram e site), memória do negócio, agenda/CRM integrados e relatório mensal.</p>
-        <a class="btn" style="margin-top:18px" href="https://wa.me/5567991355654?text=Ol%C3%A1%2C%20quero%20saber%20mais%20do%20pacote%20Completo">Quero esse</a>
+        <a class="btn btn-wa" style="margin-top:18px" href="https://wa.me/5567991355654?text=Ol%C3%A1%2C%20quero%20saber%20mais%20do%20pacote%20Completo">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+          <span>Quero esse</span>
+        </a>
       </div>
       <div class="card pacote">
         <h3>Sob medida</h3>
         <div class="preco">R$ 8.000<small>+ R$ 1.297/mês</small></div>
         <p class="desc">Agentes por setor (vendas, financeiro, suporte), painel próprio e integrações sob medida com seus sistemas.</p>
-        <a class="btn btn-out" style="margin-top:18px" href="https://wa.me/5567991355654?text=Ol%C3%A1%2C%20quero%20um%20or%C3%A7amento%20sob%20medida">Quero esse</a>
+        <a class="btn btn-out btn-wa" style="margin-top:18px" href="https://wa.me/5567991355654?text=Ol%C3%A1%2C%20quero%20um%20or%C3%A7amento%20sob%20medida">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+          <span>Quero esse</span>
+        </a>
       </div>
     </div>
     <p class="nota">Avulsos: página de apresentação R$ 1.500 · agente de Instagram R$ 500 + R$ 247/mês · manutenção de site R$ 150/mês</p>
@@ -307,7 +325,10 @@
     <h2 class="big">Vamos encontrar o gargalo primeiro.</h2>
     <p class="sub" style="margin:14px auto 0">Diagnóstico gratuito de 30 minutos. Sem compromisso.</p>
     <div style="margin-top:30px;display:flex;gap:14px;flex-wrap:wrap;justify-content:center">
-      <a class="btn" style="font-size:17px;padding:15px 30px" href="https://wa.me/5567991355654?text=Ol%C3%A1%2C%20Revoluzzione!%20Quero%20agendar%20meu%20diagn%C3%B3stico%20gratuito">WhatsApp (67) 99135-5654</a>
+      <a class="btn btn-wa" style="font-size:17px;padding:15px 30px" href="https://wa.me/5567991355654?text=Ol%C3%A1%2C%20Revoluzzione!%20Quero%20agendar%20meu%20diagn%C3%B3stico%20gratuito">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+        <span>WhatsApp (67) 99135-5654</span>
+      </a>
       <a class="btn btn-out btn-ig" style="font-size:17px;padding:15px 26px" href="https://www.instagram.com/revoluzzione.automacao/" target="_blank" rel="noopener">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
         <span>@revoluzzione.automacao</span>
