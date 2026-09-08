@@ -112,6 +112,22 @@
   .rv.in{opacity:1;transform:none}
   .badge15{animation:softPulse 3.2s ease-in-out infinite}
   @keyframes softPulse{0%,100%{box-shadow:0 0 0 0 rgba(97,217,255,0)}50%{box-shadow:0 0 26px 2px rgba(97,217,255,.3)}}
+  /* ===== aurora animada (originkit / cult-ui) ===== */
+  .aurora{position:absolute;inset:-25%;pointer-events:none;overflow:hidden;z-index:0}
+  .aurora i{position:absolute;border-radius:50%;mix-blend-mode:screen;filter:blur(80px);will-change:transform}
+  .aurora .a1{width:46%;height:46%;left:-4%;top:-14%;background:radial-gradient(circle,rgba(97,217,255,.55),transparent 65%);animation:drift1 24s ease-in-out infinite alternate}
+  .aurora .a2{width:42%;height:42%;right:-6%;bottom:-16%;background:radial-gradient(circle,rgba(59,149,225,.5),transparent 65%);animation:drift2 30s ease-in-out infinite alternate}
+  .aurora .a3{width:34%;height:34%;left:38%;top:22%;background:radial-gradient(circle,rgba(26,74,150,.42),transparent 65%);animation:drift3 20s ease-in-out infinite alternate}
+  .cta .aurora{opacity:.65}
+  @keyframes drift1{from{transform:translate(0,0) scale(1)}to{transform:translate(10%,14%) scale(1.18)}}
+  @keyframes drift2{from{transform:translate(0,0) scale(1.05)}to{transform:translate(-12%,-10%) scale(.92)}}
+  @keyframes drift3{from{transform:translate(0,0) scale(.95)}to{transform:translate(9%,-9%) scale(1.2)}}
+  /* brilho gradiente animado no titulo */
+  .hlt{background-size:230% auto;animation:shine 7s linear infinite}
+  @keyframes shine{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+  /* nav fixa com estado de rolagem + textura de grao */
+  nav.scrolled{background:rgba(7,15,31,.97);box-shadow:0 12px 34px -22px rgba(0,0,0,.95)}
+  body::after{content:"";position:fixed;inset:0;pointer-events:none;opacity:.05;z-index:120;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E")}
   @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.rv{opacity:1;transform:none}}
   .linkrow{display:flex;flex-wrap:wrap;gap:26px;margin-top:18px}
   .badge15{display:inline-block;border:1px solid var(--acc);color:var(--acc);border-radius:99px;padding:6px 16px;font-size:12px;font-weight:700;letter-spacing:.1em;margin-top:22px}
@@ -145,6 +161,7 @@
 
 <!-- HERO -->
 <header style="padding:110px 0 90px;overflow:hidden">
+  <div class="aurora" aria-hidden="true"><i class="a1"></i><i class="a2"></i><i class="a3"></i></div>
   <div class="fut fut-hero" style="background-image:url('img/futuro1.jpg')"></div>
   <div class="brilho azul" style="top:-160px;right:-120px"></div>
   <div class="brilho roxo" style="bottom:-180px;left:-140px"></div>
@@ -283,6 +300,7 @@
 
 <!-- CTA FINAL -->
 <section id="contato" class="cta" style="overflow:hidden">
+  <div class="aurora" aria-hidden="true"><i class="a1"></i><i class="a2"></i><i class="a3"></i></div>
   <div class="fut fut-cta" style="background-image:url('img/futuro4.jpg')"></div>
   <div class="wrap center">
     <div class="label" style="justify-content:center">Próximo passo</div>
@@ -316,11 +334,13 @@
 <script>
 (function () {
   // barra de progresso de leitura
-  var prog = document.getElementById('progress'), tick = false;
+  var prog = document.getElementById('progress'), nav = document.querySelector('nav'), tick = false;
   function up() {
     var s = document.documentElement;
     var h = s.scrollHeight - s.clientHeight || 1;
-    prog.style.width = ((s.scrollTop || document.body.scrollTop) / h * 100) + '%';
+    var y = s.scrollTop || document.body.scrollTop;
+    prog.style.width = (y / h * 100) + '%';
+    nav.classList.toggle('scrolled', y > 10);
     tick = false;
   }
   addEventListener('scroll', function () { if (!tick) { tick = true; requestAnimationFrame(up); } }, { passive: true });
