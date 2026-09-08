@@ -28,6 +28,22 @@
   .btn{display:inline-block;background:var(--acc);color:#04101f!important;font-weight:700;padding:11px 20px;border-radius:8px;font-size:14px;transition:.2s}
   .btn:hover{filter:brightness(1.1)}
   .btn-out{background:transparent;color:var(--acc)!important;border:1.5px solid var(--acc)}
+  /* Camadas de arte futurista — dissolvidas no fundo (fade + blend), na paleta da marca */
+  section,header{position:relative}
+  section>.wrap,header>.wrap{position:relative;z-index:1}
+  .fut{position:absolute;inset:0;pointer-events:none;background-repeat:no-repeat;mix-blend-mode:screen}
+  .fut-hero{background-size:cover;background-position:62% 40%;opacity:.6;
+    -webkit-mask-image:radial-gradient(120% 130% at 78% 18%,#000 25%,transparent 78%);
+    mask-image:radial-gradient(120% 130% at 78% 18%,#000 25%,transparent 78%)}
+  .fut-sec{background-size:cover;background-position:center 0;opacity:.32;
+    -webkit-mask-image:linear-gradient(180deg,#000 0%,transparent 88%);
+    mask-image:linear-gradient(180deg,#000 0%,transparent 88%)}
+  .fut-cta{background-size:cover;background-position:center;opacity:.4;
+    -webkit-mask-image:radial-gradient(90% 120% at 50% 40%,#000 20%,transparent 80%);
+    mask-image:radial-gradient(90% 120% at 50% 40%,#000 20%,transparent 80%)}
+  .brilho{position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none;z-index:0}
+  .brilho.azul{width:520px;height:520px;background:rgba(97,217,255,.10)}
+  .brilho.roxo{width:420px;height:420px;background:rgba(59,149,225,.09)}
   /* SECTIONS */
   section{padding:84px 0}
   .label{font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:12px}
@@ -91,7 +107,10 @@
 </nav>
 
 <!-- HERO -->
-<header style="padding:110px 0 90px">
+<header style="padding:110px 0 90px;overflow:hidden">
+  <div class="fut fut-hero" style="background-image:url('img/futuro1.jpg')"></div>
+  <div class="brilho azul" style="top:-160px;right:-120px"></div>
+  <div class="brilho roxo" style="bottom:-180px;left:-140px"></div>
   <div class="wrap">
     <div class="label">Sites · Automação · Agentes de IA — Campo Grande/MS</div>
     <h1>Tecnologia que trabalha antes do seu concorrente.</h1>
@@ -119,7 +138,8 @@
 </section>
 
 <!-- TRÊS PILARES -->
-<section id="solucoes">
+<section id="solucoes" style="overflow:hidden">
+  <div class="fut fut-sec" style="background-image:url('img/futuro2.jpg')"></div>
   <div class="wrap">
     <div class="label">A proposta</div>
     <h2>Uma operação digital. Três pilares.</h2>
@@ -209,7 +229,8 @@
 </section>
 
 <!-- CTA FINAL -->
-<section id="contato" class="cta">
+<section id="contato" class="cta" style="overflow:hidden">
+  <div class="fut fut-cta" style="background-image:url('img/futuro4.jpg')"></div>
   <div class="wrap center">
     <div class="label" style="justify-content:center">Próximo passo</div>
     <h2 class="big">Vamos encontrar o gargalo primeiro.</h2>
