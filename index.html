@@ -134,6 +134,38 @@
   @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.rv{opacity:1;transform:none}}
   .linkrow{display:flex;flex-wrap:wrap;gap:26px;margin-top:18px}
   .badge15{display:inline-block;border:1px solid var(--acc);color:var(--acc);border-radius:99px;padding:6px 16px;font-size:12px;font-weight:700;letter-spacing:.1em;margin-top:22px}
+  /* ===== Quiz "Descubra seu plano" ===== */
+  #quiz .quiz-card{max-width:760px;margin:40px auto 0;background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid var(--linha);border-radius:18px;padding:34px 34px 30px;text-align:left;position:relative}
+  .quiz-top{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+  .quiz-count{font-size:12px;letter-spacing:.14em;color:var(--corpo);font-weight:700}
+  .quiz-bar{flex:1;height:5px;background:rgba(97,217,255,.14);border-radius:99px;overflow:hidden}
+  .quiz-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#3B95E1,#61D9FF);border-radius:99px;transition:width .45s cubic-bezier(.2,.7,.2,1)}
+  .quiz-q h3{font-size:clamp(19px,2.6vw,25px);margin:18px 0 6px}
+  .quiz-q .q-sub{color:var(--corpo);font-size:14px;margin-bottom:18px}
+  .qopts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .qopt{border:1.5px solid var(--linha);background:rgba(10,20,40,.45);border-radius:12px;padding:15px 16px;cursor:pointer;font-size:14.5px;color:var(--tit);display:flex;gap:11px;align-items:flex-start;transition:border-color .2s,background .2s,transform .15s}
+  .qopt:hover{border-color:rgba(97,217,255,.45);transform:translateY(-2px)}
+  .qopt .mark{width:19px;height:19px;min-width:19px;border-radius:50%;border:2px solid #33507f;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:.2s}
+  .qopt.sel{border-color:var(--acc);background:rgba(97,217,255,.09)}
+  .qopt.sel .mark{border-color:var(--acc);background:var(--acc)}
+  .qopt.sel .mark:after{content:"";width:7px;height:7px;border-radius:50%;background:#04101f}
+  .quiz-nav{display:flex;justify-content:space-between;margin-top:26px;gap:12px}
+  .quiz-nav .btn{padding:10px 22px}
+  .btn:disabled{opacity:.4;pointer-events:none}
+  .quiz-res{text-align:center}
+  .quiz-res .plano-tag{display:inline-block;margin-top:6px}
+  .quiz-res h3{font-size:clamp(22px,3vw,30px)}
+  .res-plano{font-size:clamp(26px,3.6vw,38px);font-weight:800;background:linear-gradient(90deg,#61D9FF,#3B95E1);-webkit-background-clip:text;background-clip:text;color:transparent;margin:6px 0 2px}
+  .res-precos{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin:14px 0 6px}
+  .res-precos div{background:rgba(10,20,40,.55);border:1px solid var(--linha);border-radius:12px;padding:12px 20px}
+  .res-precos b{display:block;font-size:22px;color:var(--tit)}
+  .res-precos small{color:var(--acc);font-weight:700}
+  .res-inclui{list-style:none;margin:16px 0 4px;text-align:left;max-width:480px;margin-left:auto;margin-right:auto}
+  .res-inclui li{font-size:14.5px;padding-left:28px;position:relative;margin:7px 0}
+  .res-inclui li:before{content:"✓";position:absolute;left:0;color:var(--ok);font-weight:800}
+  .res-nota{font-size:12.5px;color:var(--corpo);opacity:.85;margin-top:14px}
+  .res-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+  @media(max-width:640px){.qopts{grid-template-columns:1fr}.quiz-card{padding:24px 18px}}
   @media(max-width:900px){
     .grid3,.grid2{grid-template-columns:1fr}
     .grid4{grid-template-columns:repeat(2,1fr)}
@@ -150,6 +182,7 @@
     <div class="brand">REVOLUZ<b>ZIONE</b></div>
     <div class="nav-links">
       <a href="#solucoes">Soluções</a>
+      <a href="#quiz">Teste de plano</a>
       <a href="#como">Como funciona</a>
       <a href="#pacotes">Pacotes</a>
       <a href="#contato">Contato</a>
@@ -276,6 +309,22 @@
   </div>
 </section>
 
+<!-- QUIZ: DESCUBRA SEU PLANO -->
+<section id="quiz" style="background:var(--bg2);border-top:1px solid var(--linha);border-bottom:1px solid var(--linha);overflow:hidden">
+  <div class="wrap center">
+    <div class="label" style="justify-content:center">Descubra seu plano</div>
+    <h2>Qual combina com o seu negócio?</h2>
+    <p class="sub" style="margin:14px auto 0">Responda 7 perguntas rápidas e veja na hora o plano ideal — com o preço certo e sem compromisso.</p>
+    <div class="quiz-card" id="quizCard">
+      <div class="quiz-top">
+        <span class="quiz-count" id="quizCount">Pergunta 1 de 7</span>
+        <div class="quiz-bar"><i id="quizBar"></i></div>
+      </div>
+      <div id="quizBox"></div>
+    </div>
+  </div>
+</section>
+
 <!-- PACOTES -->
 <section id="pacotes">
   <div class="wrap center">
@@ -387,6 +436,144 @@
       c.style.setProperty('--my', (ev.clientY - r.top) + 'px');
     });
   });
+})();
+<script>
+/* ===== Quiz "Descubra seu plano" ===== */
+(function () {
+  var PERGUNTAS = [
+    { t: "Qual é o ramo do seu negócio?", s: "Isso ajuda a recomendar o plano certo para o seu tipo de atendimento.", opts: [
+      ["clinica", "Clínica ou consultório (saúde, estética, odonto)"],
+      ["servico", "Prestador de serviço (oficina, salão, pet, academia)"],
+      ["imob", "Imobiliária ou corretor"],
+      ["adv", "Advocacia / escritório"],
+      ["outro", "Outro tipo de negócio"]] },
+    { t: "Onde seus clientes mais falam com você?", s: "Marque onde a conversa realmente acontece hoje.", opts: [
+      ["wa", "WhatsApp"],
+      ["ig", "Instagram (mensagens e comentários)"],
+      ["todos", "WhatsApp + Instagram + site"],
+      ["so_local", "Pessoalmente / por telefone"]] },
+    { t: "Quando o cliente chama fora do horário, o que acontece?", s: "Seja sincero — é aqui que a venda escapa.", opts: [
+      ["rapido", "Respondo rápido na maioria das vezes"],
+      ["horas", "Demora algumas horas para responder"],
+      ["dia", "Só respondo no dia seguinte"],
+      ["nsei", "Não sei / não acompanho"]] },
+    { t: "Você tem site hoje?", s: "Isso define se você precisa nascer com um site novo ou melhorar o que já tem.", opts: [
+      ["nao", "Não tenho site"],
+      ["sim_basico", "Tenho, mas não traz clientes"],
+      ["sim_bom", "Tenho e quero ir para o próximo nível"]] },
+    { t: "Quantos atendimentos seu negócio recebe por dia?", s: "Uma estimativa simples já basta.", opts: [
+      ["ate5", "Menos de 5 por dia"],
+      ["5a15", "Entre 5 e 15 por dia"],
+      ["mais15", "Mais de 15 por dia"],
+      ["nsei2", "Não sei dizer"]] },
+    { t: "Você sente que perde venda por demora na resposta?", s: "A resposta na hora muda o jogo no atendimento.", opts: [
+      ["muito", "Sim, com frequência"],
+      ["as_vezes", "Às vezes"],
+      ["raramente", "Raramente"]] },
+    { t: "Como a agenda e o cadastro de clientes funcionam hoje?", s: "Última pergunta!", opts: [
+      ["nada", "Tudo na cabeça / papel"],
+      ["planilha", "Planilha ou agenda do celular"],
+      ["sistema", "Já uso um sistema (agenda/CRM)"]] }
+  ];
+  var PLANOS = {
+    essencial: { nome: "Essencial", imp: "R$ 1.500", mens: "R$ 297/mês", tag: "Para começar com o pé direito",
+      inclui: ["Site institucional com página de apresentação", "Atendente de IA no WhatsApp (24h)", "Domínio e hospedagem inclusos"] },
+    completo: { nome: "Completo", imp: "R$ 3.500", mens: "R$ 697/mês", tag: "MAIS ESCOLHIDO — a operação completa",
+      inclui: ["Site com captura de contatos interessados", "Agente multi-canal: WhatsApp, Instagram e site", "Memória do negócio (Cérebro): preços, políticas, jeito de atender", "Agenda e CRM integrados", "Relatório mensal de resultados"] },
+    sobmedida: { nome: "Sob medida", imp: "R$ 8.000", mens: "R$ 1.297/mês", tag: "Para operação de volume",
+      inclui: ["Agentes por setor (vendas, financeiro, suporte)", "Integrações com seus sistemas", "Painel próprio e capacitação da equipe"] }
+  };
+  var passo = 0, respostas = {};
+  var box = document.getElementById('quizBox'), card = document.getElementById('quizCard');
+  var contador = document.getElementById('quizCount'), barra = document.getElementById('quizBar');
+
+  function selAtual() { return respostas[passo] || null; }
+  function render() {
+    if (passo >= PERGUNTAS.length) { mostrarResultado(); return; }
+    var p = PERGUNTAS[passo];
+    contador.textContent = 'Pergunta ' + (passo + 1) + ' de ' + PERGUNTAS.length;
+    barra.style.width = ((passo / PERGUNTAS.length) * 100) + '%';
+    var html = '<div class="quiz-q"><h3>' + p.t + '</h3><div class="q-sub">' + p.s + '</div><div class="qopts">';
+    p.opts.forEach(function (o) {
+      html += '<div class="qopt" data-v="' + o[0] + '"><span class="mark"></span><span>' + o[1] + '</span></div>';
+    });
+    html += '</div></div>';
+    html += '<div class="quiz-nav">';
+    html += passo > 0 ? '<button class="btn btn-out" id="qBack">← Voltar</button>' : '<span></span>';
+    html += '<button class="btn" id="qNext" disabled>Continuar →</button>';
+    html += '</div>';
+    box.innerHTML = html;
+    if (selAtual()) marcar(selAtual());
+    box.querySelectorAll('.qopt').forEach(function (el) {
+      el.addEventListener('click', function () {
+        respostas[passo] = el.getAttribute('data-v');
+        marcar(el.getAttribute('data-v'));
+        box.querySelector('#qNext').disabled = false;
+      });
+    });
+    var bt = box.querySelector('#qNext');
+    if (bt) bt.addEventListener('click', function () { passo++; render(); });
+    var bb = box.querySelector('#qBack');
+    if (bb) bb.addEventListener('click', function () { passo--; render(); });
+  }
+  function marcar(v) {
+    box.querySelectorAll('.qopt').forEach(function (el) {
+      el.classList.toggle('sel', el.getAttribute('data-v') === v);
+    });
+  }
+  function recomendar() {
+    var e = 0, c = 0, s = 0;
+    var canal = respostas[1], site = respostas[3], vol = respostas[4], perde = respostas[5], agenda = respostas[6], demora = respostas[2];
+    if (canal === 'wa') { e += 2; c += 1; }
+    if (canal === 'ig') { c += 2; s += 1; }
+    if (canal === 'todos') { c += 2; s += 1; e += 0; }
+    if (site === 'nao') { e += 1; c += 1; }
+    if (site === 'sim_basico') { c += 2; }
+    if (site === 'sim_bom') { c += 1; s += 1; }
+    if (vol === 'ate5') { e += 1; }
+    if (vol === '5a15') { e += 1; c += 1; }
+    if (vol === 'mais15') { c += 1; s += 2; }
+    if (perde === 'muito') { c += 2; s += 1; }
+    if (perde === 'as_vezes') { c += 1; }
+    if (demora === 'dia') { c += 1; e += 1; }
+    if (demora === 'horas') { c += 1; }
+    if (agenda === 'sistema') { s += 1; c += 1; }
+    if (agenda === 'planilha') { c += 1; }
+    if (s > c && s > e) return 'sobmedida';
+    if (c >= e) return 'completo';
+    return 'essencial';
+  }
+  function rotuloResposta(i, v) {
+    var p = PERGUNTAS[i], o = null;
+    p.opts.forEach(function (x) { if (x[0] === v) o = x[1]; });
+    return o || v;
+  }
+  function mostrarResultado() {
+    var plano = recomendar(), P = PLANOS[plano];
+    contador.textContent = 'Resultado';
+    barra.style.width = '100%';
+    var resumo = '';
+    for (var i = 0; i < PERGUNTAS.length; i++) resumo += (i + 1) + ') ' + rotuloResposta(i, respostas[i]) + ' · ';
+    var msg = 'Olá, Revoluzzione! Fiz o teste do site e meu plano recomendado foi o ' + P.nome + '. ' + resumo;
+    var link = 'https://wa.me/5567991355654?text=' + encodeURIComponent(msg);
+    var html = '<div class="quiz-res">';
+    html += '<span class="badge15 plan-tag" style="margin-top:0">' + P.tag + '</span>';
+    html += '<div class="res-plano">' + P.nome + '</div>';
+    html += '<div class="res-precos"><div><small>Implantação</small><b>' + P.imp + '</b></div><div><small>Mensalidade</small><b>' + P.mens + '</b></div></div>';
+    html += '<ul class="res-inclui">';
+    P.inclui.forEach(function (it) { html += '<li>' + it + '</li>'; });
+    html += '</ul>';
+    html += '<p class="res-nota">Recomendação calculada pelas suas respostas. O diagnóstico gratuito (30 min) confirma e ajusta tudo com você.</p>';
+    html += '<div class="res-cta">';
+    html += '<a class="btn btn-wa" style="font-size:16px;padding:13px 24px" href="' + link + '" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg><span>Falar com a Revoluzzione</span></a>';
+    html += '<button class="btn btn-out" id="qAgain">Refazer teste</button>';
+    html += '</div></div>';
+    box.innerHTML = html;
+    var bn = box.querySelector('#qAgain');
+    if (bn) bn.addEventListener('click', function () { passo = 0; respostas = {}; render(); });
+    if ('scrollIntoView' in card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  render();
 })();
 </script>
 </body>
