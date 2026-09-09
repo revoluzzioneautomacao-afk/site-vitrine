@@ -166,6 +166,13 @@
   .res-inclui li:before{content:"✓";position:absolute;left:0;color:var(--ok);font-weight:800}
   .res-nota{font-size:12.5px;color:var(--corpo);opacity:.85;margin-top:14px}
   .res-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+  #faq details{border:1px solid var(--linha);border-radius:12px;background:var(--card);margin-top:12px;overflow:hidden;text-align:left;transition:border-color .25s}
+  #faq details[open]{border-color:rgba(97,217,255,.55)}
+  #faq summary{padding:16px 20px;cursor:pointer;font-weight:700;color:var(--tit);font-size:15.5px;display:flex;justify-content:space-between;align-items:center;gap:14px;list-style:none}
+  #faq summary::-webkit-details-marker{display:none}
+  #faq summary:after{content:"+";color:var(--acc);font-size:20px;font-weight:800;line-height:1}
+  #faq details[open] summary:after{content:"–"}
+  #faq .faq-a{padding:0 20px 18px;color:var(--corpo);font-size:14.5px}
   @media(max-width:640px){.qopts{grid-template-columns:1fr}.quiz-card{padding:24px 18px}}
   @media(max-width:900px){
     .grid3,.grid2{grid-template-columns:1fr}
@@ -174,6 +181,19 @@
     section{padding:60px 0}
   }
 </style>
+<!-- SEO / AEO / GEO -->
+<meta property="og:title" content="Revoluzzione — Sites, Automação & Agentes de IA">
+<meta property="og:description" content="Sites, automação e agentes de IA para pequenos negócios. Atendimento 24h no WhatsApp e Instagram. Campo Grande/MS — diagnóstico gratuito.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://revoluzzioneautomacao-afk.github.io/site-vitrine/">
+<meta property="og:site_name" content="Revoluzzione">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"ProfessionalService","name":"Revoluzzione","alternateName":"Revoluzzione — Sites & Agentes de IA","description":"Sites, automação e agentes de IA para pequenos negócios. Atendimento 24h no WhatsApp e Instagram. Campo Grande/MS — diagnóstico gratuito.","url":"https://revoluzzioneautomacao-afk.github.io/site-vitrine/","telephone":"+5567991355654","email":"revoluzzione.automacao@gmail.com","priceRange":"R$1.500 - R$8.000","foundingDate":"2026-09","founder":{"@type":"Person","name":"Willian Vila Maior da Silva"},"address":{"@type":"PostalAddress","streetAddress":"Rua Flamengo, 459 — Casa 1, Vila Almeida","addressLocality":"Campo Grande","addressRegion":"MS","postalCode":"79112-230","addressCountry":"BR"},"areaServed":{"@type":"City","name":"Campo Grande"},"sameAs":["https://www.instagram.com/revoluzzione.automacao/"],"knowsAbout":["Criação de sites","Automação de WhatsApp","Agentes de IA","Atendimento 24h"],"hasOfferCatalog":{"@type":"OfferCatalog","name":"Pacotes Revoluzzione","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Essencial"},"price":"1500","priceCurrency":"BRL"},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Completo"},"price":"3500","priceCurrency":"BRL"},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Sob medida"},"price":"8000","priceCurrency":"BRL"}]}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Preciso saber programar para usar o serviço da Revoluzzione?","acceptedAnswer":{"@type":"Answer","text":"Não. A Revoluzzione configura e treina tudo com as informações do seu negócio — você não mexe em nada técnico."}},{"@type":"Question","name":"Por que o serviço tem mensalidade?","acceptedAnswer":{"@type":"Answer","text":"A mensalidade cobre o funcionamento contínuo: servidores, inteligência artificial, suporte, ajustes e evolução do sistema."}},{"@type":"Question","name":"Quanto tempo leva para o sistema ficar pronto?","acceptedAnswer":{"@type":"Answer","text":"Em até 7 dias úteis após o diagnóstico e o recebimento do conteúdo do negócio, com 15 dias de teste sem compromisso."}},{"@type":"Question","name":"A inteligência artificial pode responder errado para o meu cliente?","acceptedAnswer":{"@type":"Answer","text":"O agente responde com base nas informações que treinamos com o seu negócio. O que ele não sabe, ele transfere para você — sem resposta inventada."}},{"@type":"Question","name":"A Revoluzzione atende fora de Campo Grande?","acceptedAnswer":{"@type":"Answer","text":"Sim. O diagnóstico presencial é em Campo Grande/MS, e projetos remotos são feitos para todo o Brasil."}}]}
+</script>
 </head>
 <body>
 <div id="progress" aria-hidden="true"></div>
@@ -363,6 +383,36 @@
       </div>
     </div>
     <p class="nota">Avulsos: página de apresentação R$ 1.500 · agente de Instagram R$ 500 + R$ 247/mês · manutenção de site R$ 150/mês</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="border-bottom:1px solid var(--linha)">
+  <div class="wrap">
+    <div class="label">Dúvidas frequentes</div>
+    <h2>Perguntas que sempre fazem</h2>
+    <div style="margin-top:26px;max-width:840px">
+      <details>
+        <summary>Preciso saber programar para usar o serviço?</summary>
+        <div class="faq-a">Não. A Revoluzzione configura e treina tudo com as informações do seu negócio — você não mexe em nada técnico.</div>
+      </details>
+      <details>
+        <summary>Por que o serviço tem mensalidade?</summary>
+        <div class="faq-a">A mensalidade cobre o funcionamento contínuo: servidores, inteligência artificial, suporte, ajustes e evolução do sistema.</div>
+      </details>
+      <details>
+        <summary>Quanto tempo leva para o sistema ficar pronto?</summary>
+        <div class="faq-a">Em até 7 dias úteis após o diagnóstico e o recebimento do conteúdo do negócio — com 15 dias de teste sem compromisso.</div>
+      </details>
+      <details>
+        <summary>A inteligência artificial pode responder errado para o meu cliente?</summary>
+        <div class="faq-a">O agente responde com base nas informações que treinamos com o seu negócio. O que ele não sabe, ele transfere para você — sem resposta inventada.</div>
+      </details>
+      <details>
+        <summary>A Revoluzzione atende fora de Campo Grande?</summary>
+        <div class="faq-a">Sim. O diagnóstico presencial é em Campo Grande/MS, e projetos remotos são feitos para todo o Brasil.</div>
+      </details>
+    </div>
   </div>
 </section>
 
