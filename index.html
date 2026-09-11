@@ -360,25 +360,25 @@
     <p class="sub">Dois vídeos curtos, gravados no Instagram da própria Revoluzzione: o cliente escreve e o atendimento responde em segundos — a qualquer hora do dia ou da noite.</p>
     <div class="demo-grid">
       <div class="demo-card">
-        <button class="phone" data-video="videos/demo-dm.mp4" data-titulo="Mensagem direta" data-desc="A cliente pergunta e o atendimento responde em segundos, com os valores e as informações do negócio." aria-label="Assistir demonstração de mensagem direta">
+        <button class="phone" data-video="videos/demo-dm" data-titulo="Mensagem direta" data-desc="A cliente pergunta e o atendimento responde em segundos, com os valores e as informações do negócio." aria-label="Assistir demonstração de mensagem direta">
           <img src="img/demo-dm.jpg" alt="Demonstração do atendimento automático respondendo uma mensagem direta no Instagram" loading="lazy">
           <span class="play" aria-hidden="true"><i></i></span>
         </button>
         <div class="demo-info">
           <h3>Mensagem direta</h3>
           <p>Alguém manda mensagem de noite, domingo ou feriado — e recebe resposta na hora, como se você estivesse online.</p>
-          <button class="btn" data-video="videos/demo-dm.mp4" data-titulo="Mensagem direta" data-desc="A cliente pergunta e o atendimento responde em segundos, com os valores e as informações do negócio.">Assistir (14s)</button>
+          <button class="btn" data-video="videos/demo-dm" data-titulo="Mensagem direta" data-desc="A cliente pergunta e o atendimento responde em segundos, com os valores e as informações do negócio.">Assistir (14s)</button>
         </div>
       </div>
       <div class="demo-card">
-        <button class="phone" data-video="videos/demo-comentario.mp4" data-titulo="Comentário no post" data-desc="Um seguidor comenta no post e o atendimento responde na própria publicação, convidando para a conversa." aria-label="Assistir demonstração de comentário respondido">
+        <button class="phone" data-video="videos/demo-comentario" data-titulo="Comentário no post" data-desc="Um seguidor comenta no post e o atendimento responde na própria publicação, convidando para a conversa." aria-label="Assistir demonstração de comentário respondido">
           <img src="img/demo-comentario.jpg" alt="Demonstração do atendimento automático respondendo um comentário no Instagram" loading="lazy">
           <span class="play" aria-hidden="true"><i></i></span>
         </button>
         <div class="demo-info">
           <h3>Comentário no post</h3>
           <p>Quem comenta também é atendido: a resposta sai na publicação e convida a pessoa para a conversa.</p>
-          <button class="btn" data-video="videos/demo-comentario.mp4" data-titulo="Comentário no post" data-desc="Um seguidor comenta no post e o atendimento responde na própria publicação, convidando para a conversa.">Assistir (28s)</button>
+          <button class="btn" data-video="videos/demo-comentario" data-titulo="Comentário no post" data-desc="Um seguidor comenta no post e o atendimento responde na própria publicação, convidando para a conversa.">Assistir (28s)</button>
         </div>
       </div>
     </div>
@@ -690,7 +690,7 @@
 <div class="demo-modal" id="demoModal" role="dialog" aria-modal="true" aria-label="Vídeo de demonstração">
   <div class="caixa">
     <button class="demo-fechar" id="demoFechar" aria-label="Fechar vídeo">&times;</button>
-    <video id="demoVideo" controls playsinline preload="none"></video>
+    <video id="demoVideo" controls playsinline preload="metadata"></video>
     <h3 id="demoTitulo"></h3>
     <p id="demoDesc"></p>
     <a class="btn btn-wa" href="https://wa.me/5567991355654?text=Ol%C3%A1%2C%20Revoluzzione!%20Quero%20isso%20no%20meu%20neg%C3%B3cio" target="_blank" rel="noopener">Quero no meu negócio</a>
@@ -703,10 +703,18 @@
   var titulo = document.getElementById('demoTitulo');
   var desc = document.getElementById('demoDesc');
   function abrir(arq, t, d) {
-    video.src = arq;
+    video.pause();
+    video.innerHTML = '';
+    ['.mp4', '.webm'].forEach(function (ext) {
+      var s = document.createElement('source');
+      s.src = arq + ext;
+      s.type = ext === '.mp4' ? 'video/mp4' : 'video/webm';
+      video.appendChild(s);
+    });
     titulo.textContent = t || '';
     desc.textContent = d || '';
     modal.classList.add('aberto');
+    video.load();
     var p = video.play();
     if (p && p.catch) { p.catch(function () {}); }
   }
