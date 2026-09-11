@@ -360,25 +360,25 @@
     <p class="sub">Dois vídeos curtos, gravados no Instagram da própria Revoluzzione: o cliente escreve e o atendimento responde em segundos — a qualquer hora do dia ou da noite.</p>
     <div class="demo-grid">
       <div class="demo-card">
-        <button class="phone" data-video="videos/demo-dm" data-titulo="Mensagem direta" data-desc="A cliente pergunta e o atendimento responde em segundos, com os valores e as informações do negócio." aria-label="Assistir demonstração de mensagem direta">
+        <button class="phone" data-video="videos/demo-dm" data-poster="img/demo-dm.jpg" data-titulo="Mensagem direta" data-desc="A cliente pergunta e o atendimento responde em segundos, com os valores e as informações do negócio." aria-label="Assistir demonstração de mensagem direta">
           <img src="img/demo-dm.jpg" alt="Demonstração do atendimento automático respondendo uma mensagem direta no Instagram" loading="lazy">
           <span class="play" aria-hidden="true"><i></i></span>
         </button>
         <div class="demo-info">
           <h3>Mensagem direta</h3>
           <p>Alguém manda mensagem de noite, domingo ou feriado — e recebe resposta na hora, como se você estivesse online.</p>
-          <button class="btn" data-video="videos/demo-dm" data-titulo="Mensagem direta" data-desc="A cliente pergunta e o atendimento responde em segundos, com os valores e as informações do negócio.">Assistir (14s)</button>
+          <button class="btn" data-video="videos/demo-dm" data-poster="img/demo-dm.jpg" data-titulo="Mensagem direta" data-desc="A cliente pergunta e o atendimento responde em segundos, com os valores e as informações do negócio.">Assistir (14s)</button>
         </div>
       </div>
       <div class="demo-card">
-        <button class="phone" data-video="videos/demo-comentario" data-titulo="Comentário no post" data-desc="Um seguidor comenta no post e o atendimento responde na própria publicação, convidando para a conversa." aria-label="Assistir demonstração de comentário respondido">
+        <button class="phone" data-video="videos/demo-comentario" data-poster="img/demo-comentario.jpg" data-titulo="Comentário no post" data-desc="Um seguidor comenta no post e o atendimento responde na própria publicação, convidando para a conversa." aria-label="Assistir demonstração de comentário respondido">
           <img src="img/demo-comentario.jpg" alt="Demonstração do atendimento automático respondendo um comentário no Instagram" loading="lazy">
           <span class="play" aria-hidden="true"><i></i></span>
         </button>
         <div class="demo-info">
           <h3>Comentário no post</h3>
           <p>Quem comenta também é atendido: a resposta sai na publicação e convida a pessoa para a conversa.</p>
-          <button class="btn" data-video="videos/demo-comentario" data-titulo="Comentário no post" data-desc="Um seguidor comenta no post e o atendimento responde na própria publicação, convidando para a conversa.">Assistir (28s)</button>
+          <button class="btn" data-video="videos/demo-comentario" data-poster="img/demo-comentario.jpg" data-titulo="Comentário no post" data-desc="Um seguidor comenta no post e o atendimento responde na própria publicação, convidando para a conversa.">Assistir (28s)</button>
         </div>
       </div>
     </div>
@@ -702,7 +702,7 @@
   var video = document.getElementById('demoVideo');
   var titulo = document.getElementById('demoTitulo');
   var desc = document.getElementById('demoDesc');
-  function abrir(arq, t, d) {
+  function abrir(arq, t, d, capa) {
     video.pause();
     video.innerHTML = '';
     ['.mp4', '.webm'].forEach(function (ext) {
@@ -711,6 +711,7 @@
       s.type = ext === '.mp4' ? 'video/mp4; codecs="avc1.4d401f"' : 'video/webm; codecs="vp9"';
       video.appendChild(s);
     });
+    video.poster = capa || '';
     titulo.textContent = t || '';
     desc.textContent = d || '';
     modal.classList.add('aberto');
@@ -726,7 +727,7 @@
   }
   document.querySelectorAll('[data-video]').forEach(function (el) {
     el.addEventListener('click', function () {
-      abrir(el.getAttribute('data-video'), el.getAttribute('data-titulo'), el.getAttribute('data-desc'));
+      abrir(el.getAttribute('data-video'), el.getAttribute('data-titulo'), el.getAttribute('data-desc'), el.getAttribute('data-poster'));
     });
   });
   document.getElementById('demoFechar').addEventListener('click', fechar);
