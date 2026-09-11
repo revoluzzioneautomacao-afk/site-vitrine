@@ -708,7 +708,7 @@
     ['.mp4', '.webm'].forEach(function (ext) {
       var s = document.createElement('source');
       s.src = arq + ext;
-      s.type = ext === '.mp4' ? 'video/mp4' : 'video/webm';
+      s.type = ext === '.mp4' ? 'video/mp4; codecs="avc1.4d401f"' : 'video/webm; codecs="vp9"';
       video.appendChild(s);
     });
     titulo.textContent = t || '';
