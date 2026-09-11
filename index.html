@@ -180,6 +180,27 @@
     .nav-links{display:none}
     section{padding:60px 0}
   }
+
+  /* --- DEMONSTRAÇÃO EM VÍDEO --- */
+  .demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:34px}
+  .demo-card{background:var(--card);border:1px solid var(--linha);border-radius:18px;padding:22px;display:flex;gap:20px;align-items:center;transition:border-color .3s ease,transform .3s ease}
+  .demo-card:hover{border-color:var(--acc);transform:translateY(-3px)}
+  .phone{position:relative;width:148px;flex:none;border-radius:16px;overflow:hidden;border:1px solid var(--linha);background:#000;cursor:pointer;padding:0}
+  .phone img{display:block;width:100%;height:auto}
+  .phone .play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(7,15,31,.10),rgba(7,15,31,.55))}
+  .phone .play i{width:48px;height:48px;border-radius:50%;background:rgba(97,217,255,.94);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 22px rgba(0,0,0,.45)}
+  .phone .play i::after{content:"";border-left:15px solid #06121f;border-top:9px solid transparent;border-bottom:9px solid transparent;margin-left:5px}
+  .demo-info h3{color:var(--tit);font-size:19px;margin:0 0 6px}
+  .demo-info p{font-size:14px;margin:0 0 14px}
+  .demo-info .btn{border:0;cursor:pointer;font-family:inherit}
+  .demo-modal{position:fixed;inset:0;background:rgba(3,7,16,.93);display:none;align-items:center;justify-content:center;z-index:120;padding:20px}
+  .demo-modal.aberto{display:flex}
+  .demo-modal .caixa{max-width:400px;width:100%;text-align:center;position:relative}
+  .demo-modal video{width:100%;border-radius:16px;background:#000;box-shadow:0 18px 60px rgba(0,0,0,.65)}
+  .demo-modal h3{color:var(--tit);margin:14px 0 4px;font-size:18px}
+  .demo-modal p{color:var(--corpo);font-size:13.5px;margin:0 0 14px}
+  .demo-fechar{position:absolute;top:-46px;right:0;background:none;border:0;color:#F7FAFF;font-size:30px;line-height:1;cursor:pointer}
+  @media(max-width:820px){.demo-grid{grid-template-columns:1fr}.demo-card{padding:18px}.phone{width:120px}}
 </style>
 <!-- SEO / AEO / GEO -->
 <meta property="og:title" content="Revoluzzione — Sites, Automação & Agentes de IA">
@@ -203,6 +224,7 @@
     <div class="brand">REVOLUZ<b>ZIONE</b></div>
     <div class="nav-links">
       <a href="#solucoes">Soluções</a>
+      <a href="#demo">Funcionando</a>
       <a href="#quiz">Teste de plano</a>
       <a href="#como">Como funciona</a>
       <a href="#pacotes">Pacotes</a>
@@ -327,6 +349,42 @@
       <div class="passo"><div class="n">4</div><div><h3>Operação</h3><p>Ajustamos e acompanhamos o uso, com relatório mensal.</p></div></div>
     </div>
     <span class="badge15">15 DIAS DE TESTE SEM COMPROMISSO</span>
+  </div>
+</section>
+
+<!-- DEMONSTRAÇÃO EM VÍDEO -->
+<section id="demo" style="border-top:1px solid var(--linha);border-bottom:1px solid var(--linha)">
+  <div class="wrap">
+    <div class="label">Veja funcionando</div>
+    <h2>O atendimento respondendo de verdade.</h2>
+    <p class="sub">Dois vídeos curtos, gravados no Instagram da própria Revoluzzione: o cliente escreve e o atendimento responde em segundos — a qualquer hora do dia ou da noite.</p>
+    <div class="demo-grid">
+      <div class="demo-card">
+        <button class="phone" data-video="videos/demo-dm.mp4" data-titulo="Mensagem direta" data-desc="A cliente pergunta e o atendimento responde em segundos, com os valores e as informações do negócio." aria-label="Assistir demonstração de mensagem direta">
+          <img src="img/demo-dm.jpg" alt="Demonstração do atendimento automático respondendo uma mensagem direta no Instagram" loading="lazy">
+          <span class="play" aria-hidden="true"><i></i></span>
+        </button>
+        <div class="demo-info">
+          <h3>Mensagem direta</h3>
+          <p>Alguém manda mensagem de noite, domingo ou feriado — e recebe resposta na hora, como se você estivesse online.</p>
+          <button class="btn" data-video="videos/demo-dm.mp4" data-titulo="Mensagem direta" data-desc="A cliente pergunta e o atendimento responde em segundos, com os valores e as informações do negócio.">Assistir (14s)</button>
+        </div>
+      </div>
+      <div class="demo-card">
+        <button class="phone" data-video="videos/demo-comentario.mp4" data-titulo="Comentário no post" data-desc="Um seguidor comenta no post e o atendimento responde na própria publicação, convidando para a conversa." aria-label="Assistir demonstração de comentário respondido">
+          <img src="img/demo-comentario.jpg" alt="Demonstração do atendimento automático respondendo um comentário no Instagram" loading="lazy">
+          <span class="play" aria-hidden="true"><i></i></span>
+        </button>
+        <div class="demo-info">
+          <h3>Comentário no post</h3>
+          <p>Quem comenta também é atendido: a resposta sai na publicação e convida a pessoa para a conversa.</p>
+          <button class="btn" data-video="videos/demo-comentario.mp4" data-titulo="Comentário no post" data-desc="Um seguidor comenta no post e o atendimento responde na própria publicação, convidando para a conversa.">Assistir (28s)</button>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:26px;text-align:center">
+      <a class="btn btn-wa" href="https://wa.me/5567991355654?text=Ol%C3%A1%2C%20Revoluzzione!%20Quero%20ver%20isso%20funcionando%20no%20meu%20neg%C3%B3cio" target="_blank" rel="noopener">Quero isso no meu negócio</a>
+    </div>
   </div>
 </section>
 
@@ -626,6 +684,46 @@
     if ('scrollIntoView' in card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
   render();
+})();
+</script>
+<!-- MODAL DA DEMONSTRAÇÃO -->
+<div class="demo-modal" id="demoModal" role="dialog" aria-modal="true" aria-label="Vídeo de demonstração">
+  <div class="caixa">
+    <button class="demo-fechar" id="demoFechar" aria-label="Fechar vídeo">&times;</button>
+    <video id="demoVideo" controls playsinline preload="none"></video>
+    <h3 id="demoTitulo"></h3>
+    <p id="demoDesc"></p>
+    <a class="btn btn-wa" href="https://wa.me/5567991355654?text=Ol%C3%A1%2C%20Revoluzzione!%20Quero%20isso%20no%20meu%20neg%C3%B3cio" target="_blank" rel="noopener">Quero no meu negócio</a>
+  </div>
+</div>
+<script>
+(function () {
+  var modal = document.getElementById('demoModal');
+  var video = document.getElementById('demoVideo');
+  var titulo = document.getElementById('demoTitulo');
+  var desc = document.getElementById('demoDesc');
+  function abrir(arq, t, d) {
+    video.src = arq;
+    titulo.textContent = t || '';
+    desc.textContent = d || '';
+    modal.classList.add('aberto');
+    var p = video.play();
+    if (p && p.catch) { p.catch(function () {}); }
+  }
+  function fechar() {
+    video.pause();
+    video.removeAttribute('src');
+    video.load();
+    modal.classList.remove('aberto');
+  }
+  document.querySelectorAll('[data-video]').forEach(function (el) {
+    el.addEventListener('click', function () {
+      abrir(el.getAttribute('data-video'), el.getAttribute('data-titulo'), el.getAttribute('data-desc'));
+    });
+  });
+  document.getElementById('demoFechar').addEventListener('click', fechar);
+  modal.addEventListener('click', function (e) { if (e.target === modal) fechar(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal.classList.contains('aberto')) fechar(); });
 })();
 </script>
 </body>
