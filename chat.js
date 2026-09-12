@@ -41,12 +41,15 @@
   #rev-chat .rodape{font-size:11px;color:#6f8199;text-align:center;padding:0 12px 10px;background:#070F1F}
   #rev-chat .rodape a{color:#61D9FF}
   @media(max-width:520px){#rev-chat{right:8px;left:8px;bottom:8px;width:auto}}
+  @keyframes revPulse{0%,100%{box-shadow:0 10px 30px rgba(0,0,0,.45)}50%{box-shadow:0 10px 34px rgba(97,217,255,.6)}}
+  #rev-chat-btn{animation:revPulse 2.8s ease-in-out infinite}
+  @media (prefers-reduced-motion: reduce){#rev-chat-btn{animation:none}}
   `;
   document.head.appendChild(estilo);
 
   var botao = document.createElement('button');
   botao.id = 'rev-chat-btn';
-  botao.innerHTML = '<span class="dot"></span> Fale com a gente';
+  botao.innerHTML = '<span class="dot"></span> Quero um orçamento';
   document.body.appendChild(botao);
 
   var caixa = document.createElement('div');
@@ -95,7 +98,7 @@
     caixa.classList.add('aberto');
     botao.style.display = 'none';
     if (!corpo.children.length) {
-      bolha('Olá! 👋 Sou o atendimento da Revoluzzione. Posso te explicar como funciona o site, o agente de IA e os valores. O que você quer saber?', 'agente');
+      bolha('Olá! 👋 Aqui é o atendimento automático da Revoluzzione. A gente cria sites e agentes de IA que respondem seus clientes 24h no WhatsApp, Instagram e no próprio site.\n\nMe diz o que você procura — já te passo os valores.', 'agente');
       mostrarSugestoes(['Quanto custa?', 'O que vocês fazem?', 'Quero um site']);
     }
     setTimeout(function () { input.focus(); }, 150);
@@ -104,6 +107,7 @@
   function fechar() {
     caixa.classList.remove('aberto');
     botao.style.display = 'flex';
+    try { sessionStorage.setItem('rev_chat_fechado', '1'); } catch (e) {}
   }
 
   botao.addEventListener('click', abrir);
@@ -145,4 +149,18 @@
     e.preventDefault();
     enviar(input.value);
   });
+
+  // Abre sozinho uma vez a cada visita (12s) — se o visitante não fechou nem já conversou
+  var jaFechou = false, jaAbriu = false;
+  try {
+    jaFechou = sessionStorage.getItem('rev_chat_fechado') === '1';
+    jaAbriu = sessionStorage.getItem('rev_chat_visto') === '1';
+  } catch (e) {}
+  if (!jaFechou && !jaAbriu) {
+    setTimeout(function () {
+      if (caixa.classList.contains('aberto')) return;
+      abrir();
+      try { sessionStorage.setItem('rev_chat_visto', '1'); } catch (e) {}
+    }, 12000);
+  }
 })();
