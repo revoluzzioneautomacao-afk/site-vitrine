@@ -56,7 +56,7 @@
   caixa.id = 'rev-chat';
   caixa.innerHTML = `
     <header>
-      <div class="nome"><b>Atendimento Revoluzzione</b><small>responde em segundos · 24h com IA</small></div>
+      <div class="nome"><b>Atendimento Revoluzzione</b><small>responde em segundos · 24h</small></div>
       <button type="button" aria-label="Fechar">&times;</button>
     </header>
     <div class="corpo" id="rev-chat-corpo"></div>
@@ -65,7 +65,7 @@
       <input id="rev-chat-input" placeholder="Escreva sua dúvida..." autocomplete="off" maxlength="500">
       <button type="submit">Enviar</button>
     </form>
-    <div class="rodape">Atendimento automático com inteligência artificial · <a href="${WHATS}" target="_blank" rel="noopener">falar com uma pessoa</a></div>`;
+    <div class="rodape">Atendimento Revoluzzione · <a href="${WHATS}" target="_blank" rel="noopener">falar com uma pessoa</a></div>`;
   document.body.appendChild(caixa);
 
   var corpo = caixa.querySelector('#rev-chat-corpo');
