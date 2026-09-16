@@ -98,7 +98,7 @@
     caixa.classList.add('aberto');
     botao.style.display = 'none';
     if (!corpo.children.length) {
-      bolha('Olá! 👋 Aqui é o atendimento automático da Revoluzzione. A gente cria sites e agentes de IA que respondem seus clientes 24h no WhatsApp, Instagram e no próprio site.\n\nMe diz o que você procura — já te passo os valores.', 'agente');
+      bolha('Olá! 👋 Aqui é o atendimento automático da Revoluzzione. A gente cria sites e agentes de IA que respondem seus clientes 24h no WhatsApp, Instagram e no próprio site.\n\nMe diz o que você procura — a gente monta um orçamento sob medida pra você.', 'agente');
       mostrarSugestoes(['Quanto custa?', 'O que vocês fazem?', 'Quero um site']);
     }
     setTimeout(function () { input.focus(); }, 150);
