@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conectar conta comercial — Revoluzzione</title>
+<meta name="description" content="Conecte a conta comercial do Facebook/Instagram/WhatsApp para o atendimento automático da Revoluzzione.">
+<style>
+  :root{
+    --fundo:#070F1F; --fundo2:#0C1830; --texto:#F7FAFF; --texto2:#AAB8CC;
+    --destaque:#61D9FF; --borda:#1E2E4A; --ok:#3DDC97; --erro:#FF6B6B;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fundo);color:var(--texto);
+       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       line-height:1.55;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:24px}
+  .cartao{width:100%;max-width:680px;background:var(--fundo2);border:1px solid var(--borda);
+          border-radius:18px;padding:34px 32px}
+  .marca{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+  .marca .ponto{width:34px;height:34px;border-radius:10px;background:var(--destaque);
+                display:flex;align-items:center;justify-content:center;color:#06213A;font-weight:800}
+  .marca span{font-weight:700;letter-spacing:.2px}
+  h1{font-size:26px;margin:0 0 8px}
+  p{color:var(--texto2);margin:0 0 18px;font-size:15px}
+  ul{color:var(--texto2);font-size:14px;margin:0 0 22px;padding-left:20px}
+  li{margin-bottom:6px}
+  button{background:var(--destaque);color:#06213A;border:0;border-radius:12px;padding:15px 26px;
+         font-size:16px;font-weight:700;cursor:pointer;width:100%}
+  button:hover{filter:brightness(1.08)}
+  button:disabled{opacity:.55;cursor:default}
+  .secundario{background:transparent;color:var(--texto2);border:1px solid var(--borda);
+              font-weight:600;font-size:14px;padding:11px 18px;width:auto;margin-top:14px}
+  #estado{margin-top:20px;font-size:14px;color:var(--texto2)}
+  .ok{color:var(--ok)} .erro{color:var(--erro)}
+  pre{background:#050B17;border:1px solid var(--borda);border-radius:12px;padding:14px;
+      overflow:auto;font-size:13px;color:var(--texto);max-height:280px}
+  .oculto{display:none}
+  .ativo{border:1px solid var(--borda);border-radius:12px;padding:12px 14px;margin-bottom:10px;background:#0A1428}
+  .ativo b{color:var(--texto)} .ativo small{color:var(--texto2)}
+  footer{margin-top:24px;color:#7C8BA3;font-size:12.5px;border-top:1px solid var(--borda);padding-top:16px}
+  a{color:var(--destaque)}
+</style>
+</head>
+<body>
+<div class="cartao">
+  <div class="marca"><div class="ponto">R</div><span>Revoluzzione · Sites &amp; Agentes de I.A</span></div>
+
+  <h1>Conectar conta comercial</h1>
+  <p>Autorize o acesso à sua conta comercial da Meta para que o assistente de atendimento da Revoluzzione
+     possa ler e responder as mensagens e comentários recebidos — e operar o WhatsApp Business.</p>
+
+  <ul>
+    <li>Ler e responder <b>mensagens diretas</b> do Instagram (somente dentro da janela de 24 horas).</li>
+    <li>Ler e responder <b>comentários</b> nos seus posts.</li>
+    <li>Listar as <b>Páginas</b> que você administra e o Instagram vinculado.</li>
+    <li>Enviar e receber mensagens no <b>WhatsApp Business</b> da empresa.</li>
+  </ul>
+
+  <button id="btnConectar" disabled>Carregando…</button>
+  <div id="estado">Preparando a conexão segura com a Meta…</div>
+
+  <div id="resultado" class="oculto">
+    <h3 style="font-size:17px;margin:22px 0 10px">Contas conectadas</h3>
+    <div id="ativos"></div>
+    <button id="btnSair" class="secundario">Desconectar</button>
+    <h3 style="font-size:15px;margin:22px 0 8px">Resposta técnica</h3>
+    <pre id="bruto"></pre>
+  </div>
+
+  <footer>
+    Este aplicativo é operado pela Revoluzzione (CNPJ 69.007.795/0001-66) para atendimento da própria
+    conta comercial. <a href="privacidade.html">Política de Privacidade</a> · <a href="termos.html">Termos</a>
+  </footer>
+</div>
+
+<script>
+  var APP_ID = '2192645484635875';
+  // identificacao da configuracao de login criada no app (Login do Facebook para Empresas)
+  var CONFIG_ID = '2156132311993440';
+  var ESCOPOS = ['business_management','instagram_basic','instagram_manage_comments',
+                 'instagram_manage_messages','pages_read_engagement','pages_show_list',
+                 'whatsapp_business_management','whatsapp_business_messaging'];
+
+  window.fbAsyncInit = function () {
+    FB.init({ appId: APP_ID, autoLogAppEvents: true, xfbml: false, version: 'v21.0' });
+    var b = document.getElementById('btnConectar');
+    b.disabled = false;
+    b.textContent = 'Conectar com Facebook';
+    document.getElementById('estado').textContent =
+      'Clique para entrar com a conta que administra a Página e o Instagram da empresa.';
+  };
+  (function (d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id; js.async = true;
+    js.src = 'https://connect.facebook.net/pt_BR/sdk.js';
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+
+  document.getElementById('btnConectar').addEventListener('click', function () {
+    var b = this;
+    b.disabled = true;
+    document.getElementById('estado').textContent = 'Abrindo a janela de autorização da Meta…';
+    FB.login(function (resposta) {
+      if (resposta.authResponse) {
+        mostrar(resposta);
+      } else {
+        document.getElementById('estado').innerHTML =
+          '<span class="erro">Autorização cancelada.</span> Nada foi alterado na sua conta.';
+        b.disabled = false;
+      }
+    }, { config_id: CONFIG_ID, override_default_response_type: true });
+  });
+
+  function mostrar(resposta) {
+    var r = resposta.authResponse || {};
+    document.getElementById('estado').innerHTML =
+      '<span class="ok">Conectado com sucesso.</span> Conta autorizada e permissões concedidas.';
+    document.getElementById('resultado').classList.remove('oculto');
+
+    FB.api('/me', { fields: 'name,id' }, function (eu) {
+      var linha = document.createElement('div');
+      linha.className = 'ativo';
+      linha.innerHTML = '<b>' + (eu && eu.name ? eu.name : 'Conta autorizada') + '</b><br>' +
+                        '<small>Usuário autorizante · ID ' + (eu && eu.id ? eu.id : '—') + '</small>';
+      document.getElementById('ativos').appendChild(linha);
+    });
+
+    FB.api('/me/accounts',
+      { fields: 'name,instagram_business_account{username,name},tasks' },
+      function (contas) {
+        var alvo = document.getElementById('ativos');
+        if (contas && contas.data && contas.data.length) {
+          contas.data.forEach(function (pg) {
+            var ig = pg.instagram_business_account || {};
+            var d = document.createElement('div');
+            d.className = 'ativo';
+            d.innerHTML = '<b>' + pg.name + '</b><br><small>Página do Facebook · ID ' + pg.id + '</small>' +
+                          (ig.username ? '<br><small>Instagram conectado: @' + ig.username + '</small>' : '');
+            alvo.appendChild(d);
+          });
+        } else {
+          var d = document.createElement('div');
+          d.className = 'ativo';
+          d.innerHTML = '<small>Nenhuma Página retornada — a conta autorizada precisa administrar uma Página com Instagram comercial vinculado.</small>';
+          alvo.appendChild(d);
+        }
+      });
+
+    var resumo = {
+      status: 'autorizado',
+      usuario: r.userID || null,
+      escopos_concedidos: (r.grantedScopes || ESCOPOS),
+      expira_em_segundos: r.expiresIn || null
+    };
+    document.getElementById('bruto').textContent = JSON.stringify(resumo, null, 2);
+    document.getElementById('btnSair').classList.remove('oculto');
+  }
+
+  document.getElementById('btnSair') && document.getElementById('btnSair').addEventListener('click', function () {
+    FB.logout(function () {
+      document.getElementById('resultado').classList.add('oculto');
+      document.getElementById('ativos').innerHTML = '';
+      document.getElementById('estado').textContent = 'Sessão encerrada nesta página.';
+      document.getElementById('btnConectar').disabled = false;
+    });
+  });
+</script>
+</body>
+</html>
