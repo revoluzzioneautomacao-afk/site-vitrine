@@ -24,16 +24,17 @@
   p{color:var(--texto2);margin:0 0 18px;font-size:15px}
   ul{color:var(--texto2);font-size:14px;margin:0 0 22px;padding-left:20px}
   li{margin-bottom:6px}
-  button{background:var(--destaque);color:#06213A;border:0;border-radius:12px;padding:15px 26px;
-         font-size:16px;font-weight:700;cursor:pointer;width:100%}
-  button:hover{filter:brightness(1.08)}
+  button,a.botao{background:var(--destaque);color:#06213A;border:0;border-radius:12px;padding:15px 26px;
+         font-size:16px;font-weight:700;cursor:pointer;width:100%;display:block;text-align:center;
+         text-decoration:none;font-family:inherit}
+  button:hover,a.botao:hover{filter:brightness(1.08)}
   button:disabled{opacity:.55;cursor:default}
   .secundario{background:transparent;color:var(--texto2);border:1px solid var(--borda);
-              font-weight:600;font-size:14px;padding:11px 18px;width:auto;margin-top:14px}
+              font-weight:600;font-size:14px;padding:11px 18px;width:auto;margin-top:14px;display:inline-block}
   #estado{margin-top:20px;font-size:14px;color:var(--texto2)}
   .ok{color:var(--ok)} .erro{color:var(--erro)}
   pre{background:#050B17;border:1px solid var(--borda);border-radius:12px;padding:14px;
-      overflow:auto;font-size:13px;color:var(--texto);max-height:280px}
+      overflow:auto;font-size:12.5px;color:var(--texto);max-height:220px;white-space:pre-wrap}
   .oculto{display:none}
   .ativo{border:1px solid var(--borda);border-radius:12px;padding:12px 14px;margin-bottom:10px;background:#0A1428}
   .ativo b{color:var(--texto)} .ativo small{color:var(--texto2)}
@@ -56,13 +57,13 @@
     <li>Enviar e receber mensagens no <b>WhatsApp Business</b> da empresa.</li>
   </ul>
 
-  <button id="btnConectar" disabled>Carregando…</button>
-  <div id="estado">Preparando a conexão segura com a Meta…</div>
+  <a id="btnConectar" class="botao" href="#">Conectar com Facebook</a>
+  <div id="estado">Você será levado ao login da Meta para autorizar estas permissões.</div>
 
   <div id="resultado" class="oculto">
     <h3 style="font-size:17px;margin:22px 0 10px">Contas conectadas</h3>
     <div id="ativos"></div>
-    <button id="btnSair" class="secundario">Desconectar</button>
+    <a id="btnSair" class="secundario" href="#" onclick="desconectar();return false;">Desconectar</a>
     <h3 style="font-size:15px;margin:22px 0 8px">Resposta técnica</h3>
     <pre id="bruto"></pre>
   </div>
@@ -75,60 +76,49 @@
 
 <script>
   var APP_ID = '2192645484635875';
-  // identificacao da configuracao de login criada no app (Login do Facebook para Empresas)
-  var CONFIG_ID = '2156132311993440';
-  var ESCOPOS = ['business_management','instagram_basic','instagram_manage_comments',
-                 'instagram_manage_messages','pages_read_engagement','pages_show_list',
-                 'whatsapp_business_management','whatsapp_business_messaging'];
+  var CONFIG_ID = '2156132311993440';   // configuracao de login criada no app (Login do Facebook para Empresas)
+  var BASE = window.location.href.split('#')[0].split('?')[0];
 
-  window.fbAsyncInit = function () {
-    FB.init({ appId: APP_ID, autoLogAppEvents: true, xfbml: false, version: 'v21.0' });
-    var b = document.getElementById('btnConectar');
-    b.disabled = false;
-    b.textContent = 'Conectar com Facebook';
-    document.getElementById('estado').textContent =
-      'Clique para entrar com a conta que administra a Página e o Instagram da empresa.';
-  };
-  (function (d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id; js.async = true;
-    js.src = 'https://connect.facebook.net/pt_BR/sdk.js';
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
+  // fluxo OAuth classico (redirecionamento) — mostra a tela de login/consentimento da Meta
+  var URL_LOGIN = 'https://www.facebook.com/v21.0/dialog/oauth'
+      + '?client_id=' + APP_ID
+      + '&config_id=' + CONFIG_ID
+      + '&response_type=token'
+      + '&redirect_uri=' + encodeURIComponent(BASE);
 
-  document.getElementById('btnConectar').addEventListener('click', function () {
-    var b = this;
-    b.disabled = true;
-    document.getElementById('estado').textContent = 'Abrindo a janela de autorização da Meta…';
-    FB.login(function (resposta) {
-      if (resposta.authResponse) {
-        mostrar(resposta);
-      } else {
-        document.getElementById('estado').innerHTML =
-          '<span class="erro">Autorização cancelada.</span> Nada foi alterado na sua conta.';
-        b.disabled = false;
-      }
-    }, { config_id: CONFIG_ID, override_default_response_type: true });
-  });
+  document.getElementById('btnConectar').setAttribute('href', URL_LOGIN);
 
-  function mostrar(resposta) {
-    var r = resposta.authResponse || {};
-    document.getElementById('estado').innerHTML =
-      '<span class="ok">Conectado com sucesso.</span> Conta autorizada e permissões concedidas.';
+  function lerParametros() {
+    var frag = window.location.hash.substring(1);
+    var qs = window.location.search.substring(1);
+    var out = {};
+    (frag + '&' + qs).split('&').forEach(function (par) {
+      if (!par) return;
+      var i = par.indexOf('=');
+      if (i < 0) return;
+      out[decodeURIComponent(par.slice(0, i))] = decodeURIComponent(par.slice(i + 1).replace(/\+/g, ' '));
+    });
+    return out;
+  }
+
+  function conectarComToken(token) {
+    document.getElementById('estado').innerHTML = '<span class="ok">Conta autorizada.</span> Carregando os ativos conectados…';
     document.getElementById('resultado').classList.remove('oculto');
 
-    FB.api('/me', { fields: 'name,id' }, function (eu) {
-      var linha = document.createElement('div');
-      linha.className = 'ativo';
-      linha.innerHTML = '<b>' + (eu && eu.name ? eu.name : 'Conta autorizada') + '</b><br>' +
-                        '<small>Usuário autorizante · ID ' + (eu && eu.id ? eu.id : '—') + '</small>';
-      document.getElementById('ativos').appendChild(linha);
-    });
+    fetch('https://graph.facebook.com/v21.0/me?fields=name,id&access_token=' + encodeURIComponent(token))
+      .then(function (r) { return r.json(); })
+      .then(function (eu) {
+        var d = document.createElement('div');
+        d.className = 'ativo';
+        d.innerHTML = '<b>' + (eu.name || 'Conta autorizada') + '</b><br>' +
+                      '<small>Usuário autorizante · ID ' + (eu.id || '—') + '</small>';
+        document.getElementById('ativos').appendChild(d);
+      })
+      .catch(function () {});
 
-    FB.api('/me/accounts',
-      { fields: 'name,instagram_business_account{username,name},tasks' },
-      function (contas) {
+    fetch('https://graph.facebook.com/v21.0/me/accounts?fields=name,instagram_business_account{username,name}&access_token=' + encodeURIComponent(token))
+      .then(function (r) { return r.json(); })
+      .then(function (contas) {
         var alvo = document.getElementById('ativos');
         if (contas && contas.data && contas.data.length) {
           contas.data.forEach(function (pg) {
@@ -139,32 +129,38 @@
                           (ig.username ? '<br><small>Instagram conectado: @' + ig.username + '</small>' : '');
             alvo.appendChild(d);
           });
+          document.getElementById('estado').innerHTML =
+            '<span class="ok">Conectado com sucesso.</span> ' + contas.data.length + ' Página(s) disponível(is) para atendimento.';
         } else {
           var d = document.createElement('div');
           d.className = 'ativo';
-          d.innerHTML = '<small>Nenhuma Página retornada — a conta autorizada precisa administrar uma Página com Instagram comercial vinculado.</small>';
+          d.innerHTML = '<small>Nenhuma Página retornada — a conta precisa administrar uma Página com Instagram comercial vinculado.</small>';
           alvo.appendChild(d);
+          document.getElementById('estado').innerHTML = '<span class="ok">Conectado.</span> Nenhuma Página encontrada nesta conta.';
         }
-      });
+      })
+      .catch(function () {});
 
-    var resumo = {
+    document.getElementById('bruto').textContent = JSON.stringify({
       status: 'autorizado',
-      usuario: r.userID || null,
-      escopos_concedidos: (r.grantedScopes || ESCOPOS),
-      expira_em_segundos: r.expiresIn || null
-    };
-    document.getElementById('bruto').textContent = JSON.stringify(resumo, null, 2);
-    document.getElementById('btnSair').classList.remove('oculto');
+      escopos: (lerParametros().granted_scopes || '').split(',').filter(Boolean),
+      expira_em_segundos: Number(lerParametros().expires_in || 0) || null,
+      base: BASE
+    }, null, 2);
   }
 
-  document.getElementById('btnSair') && document.getElementById('btnSair').addEventListener('click', function () {
-    FB.logout(function () {
-      document.getElementById('resultado').classList.add('oculto');
-      document.getElementById('ativos').innerHTML = '';
-      document.getElementById('estado').textContent = 'Sessão encerrada nesta página.';
-      document.getElementById('btnConectar').disabled = false;
-    });
+  window.addEventListener('load', function () {
+    var p = lerParametros();
+    if (p.access_token) { conectarComToken(p.access_token); }
+    else if (p.error || p.error_code) {
+      document.getElementById('estado').innerHTML =
+        '<span class="erro">Autorização não concluída.</span> ' + (p.error_message || p.error_description || '');
+    }
   });
+
+  function desconectar() {
+    window.location.href = BASE;
+  }
 </script>
 </body>
 </html>
