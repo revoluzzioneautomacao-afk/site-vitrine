@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Simulador de capacidade · PMP 2027 · Semalo Matriz</title>
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#0C1830; --card:#101F3A; --card2:#14284A; --line:#21365C; --line2:#2C4573;
+  --tx:#E8EEF8; --tx2:#A9B8D2; --tx3:#7488AB;
+  --ci:#61D9FF; --or:#F88000; --ok:#3DD68C; --at:#F2C14E; --no:#E4572E;
+  --ff:"Bahnschrift","DIN Alternate","DIN 2014","Barlow","Roboto Condensed","Segoe UI",system-ui,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 var(--ff);font-variant-numeric:tabular-nums;-webkit-text-size-adjust:100%}
+.wrap{max-width:1320px;margin:0 auto;padding:20px clamp(12px,3vw,32px) 48px}
+h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:-.01em}
+small{font-size:.78em;color:var(--tx3)}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--ci);outline-offset:2px}
+
+/* topo */
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 24px;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.top h1{font-size:clamp(20px,2.4vw,28px)}
+.top p{margin:2px 0 0;color:var(--tx2);font-size:14px}
+.acts{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{background:transparent;border:1px solid var(--line2);border-radius:8px;padding:8px 14px;cursor:pointer;color:var(--tx)}
+.btn:hover{border-color:var(--ci);color:var(--ci)}
+
+#periodos{display:flex;gap:2px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:3px;margin-top:16px;overflow-x:auto}
+#periodos button{flex:1 0 auto;background:none;border:0;border-radius:7px;padding:7px 10px;color:var(--tx2);cursor:pointer;white-space:nowrap}
+#periodos button.on{background:var(--ci);color:#06243a;font-weight:600}
+#per-sel{display:none}
+
+/* hero */
+#hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.6fr);gap:24px;margin:20px 0;padding:22px 24px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--or);border-radius:12px}
+.hk{margin:0;color:var(--tx2)}
+#hero h2{font-size:clamp(34px,5vw,56px);line-height:1.05;color:var(--or);margin:4px 0 8px}
+.hs{margin:0;color:var(--tx2);max-width:44ch}
+.hs b{color:var(--tx)}
+.hs b.og{color:var(--or)}
+.hstats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px 20px;margin:0;align-content:center}
+.hstats div{border-top:1px solid var(--line);padding-top:8px}
+.hstats dt{color:var(--tx3);font-size:13px}
+.hstats dd{margin:2px 0 0;font-size:19px;font-weight:600}
+
+/* semáforo */
+.s-ok{color:var(--ok)}.s-at{color:var(--at)}.s-no{color:var(--no)}
+.pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:13px;font-weight:600;border:1px solid currentColor;white-space:nowrap}
+.s-bg-ok{background:var(--ok)}.s-bg-at{background:var(--at)}.s-bg-no{background:var(--no)}
+
+/* blocos */
+.sec{margin-top:28px}
+.sec>header{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;margin-bottom:10px}
+.sec>header h2{font-size:19px}
+.sec>header p{margin:0;color:var(--tx3);font-size:13.5px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px}
+
+/* cenário */
+#cenario{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px 24px;padding:18px 20px}
+.ctl label{display:flex;justify-content:space-between;color:var(--tx2);font-size:14px;margin-bottom:6px}
+
+.ctl output{color:var(--ci);font-weight:600;font-size:16px}
+.ctl select{width:100%;background:var(--card2);border:1px solid var(--line2);border-radius:8px;padding:8px 10px}
+input[type=range]{width:100%;accent-color:var(--ci);height:28px}
+.rng{display:flex;justify-content:space-between;color:var(--tx3);font-size:12px}
+#cen-tag{background:var(--ci);color:#06243a;border-radius:999px;padding:1px 10px;font-size:13px;font-weight:600}
+#avisos{margin-top:10px;padding:10px 14px;border:1px solid var(--at);border-radius:10px;color:var(--at);font-size:14px}
+#avisos p{margin:2px 0}
+
+/* editor */
+#editor{overflow-x:auto}
+.erow{display:grid;grid-template-columns:150px repeat(8,minmax(92px,1fr));gap:8px;align-items:center;padding:8px 14px;border-top:1px solid var(--line)}
+.erow:first-child{border-top:0}
+.ehead{color:var(--tx3);font-size:12.5px;line-height:1.25;align-items:end;padding-top:12px;padding-bottom:10px}
+.ehead small{display:block}
+.erow.comp{background:rgba(97,217,255,.04)}
+.erow[data-p=tor]{border-top:1px dashed var(--line2)}
+.ename{font-weight:600}
+.ename small{display:block;font-weight:400}
+.ecell{display:block;margin:0}
+.elbl{display:none}
+.ecell input{width:100%;background:var(--card2);border:1px solid var(--line2);border-radius:7px;padding:7px 8px;text-align:right;color:var(--tx)}
+.ecell input:hover{border-color:var(--tx3)}
+.ecell input:focus{border-color:var(--ci);outline:none;box-shadow:0 0 0 2px rgba(97,217,255,.25)}
+.ecell input.pad{color:#93A6C6;font-style:italic}
+.ecell input.ro{background:transparent;border-style:dashed;cursor:default}
+.ecell input.bad{border-color:var(--no);box-shadow:0 0 0 2px rgba(228,87,46,.3)}
+.na{display:block;color:var(--tx3);font-size:12px;line-height:1.25}
+.leg{display:flex;flex-wrap:wrap;gap:6px 18px;padding:10px 14px;border-top:1px solid var(--line);color:var(--tx3);font-size:12.5px}
+.leg i{display:inline-block;width:22px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:6px;border:1px solid var(--line2);background:var(--card2)}
+.leg i.d{border-style:dashed;background:transparent}
+
+/* cards de resultado */
+
+#cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:12px}
+.lcard{padding:14px 14px 12px;cursor:pointer;transition:border-color .15s}
+.lcard:hover{border-color:var(--line2)}
+.lcard.foco{border-color:var(--ci)}
+.lcard.isgar{border-color:var(--or);box-shadow:inset 0 3px 0 var(--or)}
+.lcard header{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
+.lcard h3{font-size:17px;margin-right:auto}
+.tag{background:var(--or);color:#1d0d00;font-size:12px;font-weight:600;border-radius:5px;padding:1px 7px}
+.kv{display:flex;justify-content:space-between;gap:8px;font-size:13.5px;color:var(--tx2);padding:1px 0}
+.kv b{color:var(--tx);font-weight:600}
+.fluxo{list-style:none;margin:10px 0 0;padding:10px 0 0;border-top:1px solid var(--line);display:grid;gap:9px}
+.fluxo li{position:relative;padding-left:12px}
+.fluxo li::before{content:"";position:absolute;left:0;top:6px;bottom:-10px;width:2px;background:var(--line2)}
+.fluxo li:last-child::before{bottom:6px}
+.fluxo li.lim::before{background:var(--or)}
+.et{display:flex;gap:6px;align-items:baseline;font-size:13.5px}
+.et span{margin-right:auto;color:var(--tx2)}
+.et em{font-style:normal;color:var(--or);font-size:12px;font-weight:600}
+.lim .et span{color:var(--tx)}
+.bar{position:relative;height:8px;background:var(--card2);border-radius:4px;margin:4px 0 2px;overflow:hidden}
+.bar .f{position:absolute;left:0;top:0;bottom:0;border-radius:4px}
+.bar .cem{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--tx)}
+.sub{font-size:12px;color:var(--tx3)}
+
+/* gráfico + mapa */
+.duo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:12px}
+.duo .card{padding:14px 16px}
+.duo h3{font-size:15px;margin-bottom:2px}
+.duo .card>p{margin:0 0 6px;color:var(--tx3);font-size:13px}
+#grafico svg{width:100%;height:auto;display:block}
+.gl{stroke:var(--line);stroke-width:1}.base{stroke:var(--line2)}
+.ax{fill:var(--tx3);font-size:11px;font-family:var(--ff)}
+
+.xl{fill:var(--tx2);font-size:12.5px;font-family:var(--ff)}.xg{fill:var(--or);font-weight:600}
+.xs{font-size:12px;font-family:var(--ff);font-weight:600}
+.xs.s-ok{fill:var(--ok)}.xs.s-at{fill:var(--at)}.xs.s-no{fill:var(--no)}
+.bc{fill:var(--ci)}.bn{fill:#8FA3C0}
+.lg{display:flex;gap:16px;font-size:12.5px;color:var(--tx2);margin-top:4px}
+.lg i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+#mapa{overflow-x:auto}
+.mapa{border-collapse:separate;border-spacing:3px;width:100%;font-size:12.5px}
+.mapa th{font-weight:400;color:var(--tx3);text-align:left;white-space:nowrap;padding-right:6px}
+.mapa thead th{text-align:center;padding:0}
+.mapa thead button{background:none;border:1px solid transparent;border-radius:6px;color:var(--tx3);padding:2px 4px;cursor:pointer;width:100%}
+.mapa thead button.on{border-color:var(--ci);color:var(--ci)}
+.mapa td{text-align:center;padding:6px 2px;border-radius:5px;font-weight:600;min-width:34px;border:1px solid transparent}
+.c-ok{background:rgba(61,214,140,.14);color:var(--ok)}.c-at{background:rgba(242,193,78,.2);color:var(--at)}.c-no{background:rgba(228,87,46,.22);color:var(--no)}
+.mapa td.on{border-color:var(--ci)}
+.mapa td.gm{box-shadow:inset 0 -3px 0 var(--or)}
+
+/* memória */
+#memoria .card{padding:16px 18px}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px}
+.tabs button{background:var(--card2);border:1px solid var(--line2);border-radius:7px;padding:5px 11px;cursor:pointer;color:var(--tx2)}
+.tabs button.on{border-color:var(--ci);color:var(--ci)}
+.mem h4{font-size:14px;color:var(--ci);margin:14px 0 4px}
+.mem h4:first-child{margin-top:0}
+.mem p{margin:0 0 8px;display:grid;gap:1px}
+.fx{color:var(--tx2);font-size:13.5px}
+.nx{font-size:14px}
+.nt{color:var(--tx3);font-size:12.5px}
+.geral{display:grid;gap:4px;margin:0 0 14px;padding:12px 14px;background:var(--card2);border-radius:9px;font-size:14px}
+.geral code{font-family:var(--ff);color:var(--tx)}
+
+/* fontes e divergências */
+
+.trio{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:12px}
+.trio .card{padding:14px 16px}
+.trio h3{font-size:15px;margin-bottom:8px}
+table.ft{width:100%;border-collapse:collapse;font-size:13px}
+.ft th,.ft td{text-align:left;padding:6px 8px 6px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.ft th{color:var(--tx3);font-weight:400}
+.ft td:first-child{color:var(--tx2)}
+.ft tr.tot td{color:var(--tx)}
+.num td:not(:first-child){text-align:right}
+.div ol{margin:0;padding-left:20px;font-size:13.5px;color:var(--tx2)}
+.div li{margin-bottom:8px}
+.div b{color:var(--tx);font-weight:600}
+#confok{font-size:13px;color:var(--ok);margin:8px 0 0}
+.foot{margin-top:28px;color:var(--tx3);font-size:12.5px;border-top:1px solid var(--line);padding-top:12px}
+
+@media (max-width:1100px){
+  #cenario{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .duo,.trio{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:820px){
+  #hero{grid-template-columns:minmax(0,1fr);padding:18px}
+  #periodos{display:none}
+  #per-sel{display:block;background:var(--card);border:1px solid var(--line2);border-radius:8px;padding:8px 10px}
+  .ehead{display:none}
+  .erow{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 12px;padding:14px}
+  .ename{grid-column:1/-1;font-size:16px}
+  .elbl{display:block;font-size:12.5px;color:var(--tx3);margin-bottom:3px}
+}
+@media (max-width:520px){
+  #cenario{grid-template-columns:minmax(0,1fr)}
+  .hstats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hstats dd{font-size:16px}
+
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+@media print{body{background:#fff;color:#000}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Simulador de capacidade · PMP 2027</h1>
+      <p>Semalo Matriz · Campo Grande/MS · PCP — base: pmp_g1.xlsx (abas MEMORIA DE CALCULO, MEMORIA DE VAZAO e GARGALO EMBALAGEM)</p>
+    </div>
+    <div class="acts">
+      <label for="per-sel" class="vh" style="position:absolute;left:-9999px">Período</label>
+      <select id="per-sel" aria-label="Período"></select>
+      <button class="btn" id="restaurar" type="button">Restaurar valores do PMP</button>
+    </div>
+  </header>
+  <nav id="periodos" aria-label="Período"></nav>
+
+  <section id="hero" aria-live="polite"></section>
+
+  <section class="sec">
+    <header><h2>Cenário</h2><span id="cen-tag" hidden>cenário ativo</span><p>Aplicado por cima da tabela de parâmetros. Compare com o PMP no topo.</p></header>
+    <div class="card" id="cenario">
+      <div class="ctl">
+        <label for="red">Redução de vazão <output id="redv">0%</output></label>
+        <input type="range" id="red" min="0" max="50" step="1" value="0">
+        <div class="rng"><span>0%</span><span>50%</span></div>
+      </div>
+      <div class="ctl">
+        <label for="dm">Máquinas a mais / a menos <output id="dmv">0</output></label>
+
+        <input type="range" id="dm" min="-3" max="3" step="1" value="0">
+        <div class="rng"><span>−3</span><span>0</span><span>+3</span></div>
+      </div>
+      <div class="ctl"><label for="alvo">Aplicar em</label><select id="alvo"></select></div>
+      <div class="ctl"><label for="tipo">Tipo de máquina</label>
+        <select id="tipo"><option value="emp">Empacotadeiras</option><option value="enf">Enfardadeiras</option></select></div>
+    </div>
+    <div id="avisos" hidden></div>
+  </section>
+
+  <section class="sec">
+    <header><h2>Parâmetros por linha</h2><p>Edite qualquer campo; o cálculo refaz a cada tecla. Período: <span id="lbl-per"></span>.</p></header>
+    <div class="card">
+      <div id="editor"></div>
+      <div class="leg">
+        <span><i></i>valor digitado</span>
+        <span><i style="color:var(--tx2)"></i>texto acinzentado: padrão do PMP (apague o campo para voltar a ele)</span>
+        <span><i class="d"></i>no ano, os dias são a soma dos meses — escolha um mês para editar</span>
+        <span>% de paradas editado vale para todos os meses da linha</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <header><h2>Resultado por linha</h2><p>Barra = necessidade ÷ capacidade da etapa; o traço branco marca 100%. Toque num cartão para ver a memória de cálculo.</p></header>
+    <div id="cards"></div>
+  </section>
+
+  <section class="sec duo">
+    <div class="card">
+      <h3>Capacidade efetiva × necessidade</h3>
+      <p>Por linha, no período selecionado. Percentual = atendimento.</p>
+
+      <div id="grafico"></div>
+      <div class="lg"><span><i style="background:var(--ci)"></i>Capacidade efetiva</span><span><i style="background:#8FA3C0"></i>Necessidade PMP</span></div>
+    </div>
+    <div class="card">
+      <h3>Atendimento mês a mês (%)</h3>
+      <p>Com os parâmetros e o cenário atuais. Sublinhado laranja = gargalo da fábrica no mês. Clique no mês para abrir.</p>
+      <div id="mapa"></div>
+    </div>
+  </section>
+
+  <section class="sec" id="memoria">
+    <header><h2>Memória de cálculo</h2><p>As fórmulas em uso, com os números do período selecionado.</p></header>
+    <div class="card">
+      <div class="geral">
+        <code>Capacidade da linha = vazão × dias × horas/dia × (1 − paradas)</code>
+        <code>Capacidade do empacotamento = kg/h por máquina × nº de empacotadeiras × dias × horas/dia × (1 − paradas)</code>
+        <code>Capacidade do enfardamento = (fardos/h por enfardadeira × nº de enfardadeiras ÷ fardos por kg) × dias × horas/dia × (1 − paradas)</code>
+        <code>Capacidade efetiva = menor das etapas · Atendimento = capacidade efetiva ÷ necessidade · Ocupação = necessidade ÷ capacidade efetiva</code>
+        <code>Semáforo sobre o atendimento: verde ≥ 100% · amarelo 95–100% · vermelho &lt; 95% (PREMISSAS!C14)</code>
+      </div>
+      <div id="memoria-corpo"></div>
+    </div>
+  </section>
+
+  <section class="sec trio">
+    <div class="card">
+      <h3>De onde vêm os valores iniciais</h3>
+      <table class="ft">
+        <thead><tr><th>Dado</th><th>Origem (pmp_g1.xlsx)</th></tr></thead>
+        <tbody>
+          <tr><td>Vazão da linha (kg/h)</td><td>MEMORIA DE CALCULO!E10:E15, vinda de MEMORIA DE VAZAO!C30:C35</td></tr>
+          <tr><td>Horas/dia</td><td>MEMORIA DE CALCULO!D10:D15</td></tr>
+
+          <tr><td>Dias do mês</td><td>MEMORIA DE CALCULO!C6:N6 (corridos: Extrusado, Batata) e C7:N7 (úteis: demais); Pellet = 65% e Tortilha = 35% dos dias úteis (C66:N66, C77:N77)</td></tr>
+          <tr><td>Paradas (h/mês)</td><td>MEMORIA DE CALCULO!C48, C58, C69, C80, C90, C100 (48, 48, 16, 12, 24, 24 h), convertidas em % das horas brutas</td></tr>
+          <tr><td>Necessidade (kg)</td><td>MEMORIA DE CALCULO!C35:N40; total da fábrica O41 = RESUMO PMP!O15</td></tr>
+          <tr><td>kg/h por máquina</td><td>GARGALO EMBALAGEM!C6:C11; combinado Pellet + Tortilha C12, ponderado por kg out/26 em K22:K91</td></tr>
+          <tr><td>Empacotadeiras</td><td>GARGALO EMBALAGEM!E6, E7, E10, E11, E12 (nota A13: total 21)</td></tr>
+          <tr><td>Enfardadeiras e fardos/h</td><td>GARGALO EMBALAGEM!E17:E18, C17:C18; demanda de fardos/h B17:B18</td></tr>
+          <tr><td>Capacidade de referência</td><td>MEMORIA DE CALCULO!O52, O62, O73, O84, O94, O104; fábrica RESUMO PMP!O14</td></tr>
+        </tbody>
+      </table>
+      <h3 style="margin-top:16px">Conferência com a planilha (valores do PMP, ano)</h3>
+      <table class="ft num"><thead><tr><th>Linha</th><th>Planilha</th><th>Simulador</th><th>Diferença (kg)</th></tr></thead><tbody id="conf"></tbody></table>
+      <p id="confok"></p>
+    </div>
+    <div class="card div">
+      <h3>Onde a base não fecha</h3>
+      <ol>
+        <li><b>Pellet + Tortilha no empacotamento.</b> A aba GARGALO EMBALAGEM (B12) soma as duas vazões (758,8 kg/h), como se rodassem ao mesmo tempo; a MEMORIA DE CALCULO divide os dias úteis 65% / 35% (C66, C77). O simulador segue a GARGALO na embalagem e a MEMORIA na linha. Se as duas alternam, a carga real do empacotamento é menor que a mostrada.</li>
+        <li><b>Teto de 30 t/dia em Extrusados.</b> MEMORIA DE VAZAO!E8 diz que o teto de 30 t/dia é aplicado, mas MEMORIA DE CALCULO!F10 usa 36.883,2 kg/dia (vazão × 24 h), que nunca limita. O simulador reproduz a planilha (sem teto de 30 t).</li>
+        <li><b>Vazão da Batata.</b> PREMISSAS!C32 registra 1.268,5 kg/h; a fórmula em MEMORIA DE VAZAO!C17 resulta em 1.109,97 kg/h, que é o valor usado no PMP e aqui.</li>
+        <li><b>In'Casa fora da Batata no kg/h por máquina.</b> GARGALO EMBALAGEM!C7 soma só a categoria "BATATA" (C22:C91). Com In'Casa (C88:C90) junto, o valor seria 866,5 kg/h por máquina em vez de 863,1.</li>
+        <li><b>Enfardamento do Pellet.</b> Bacon Crant e Ribcrant são SKUs em fardo (GARGALO EMBALAGEM!M71:M72 = 226,8 fardos/h), mas nenhuma enfardadeira de Pellet/Tortilha está listada na seção 2. Não calculado.</li>
+        <li><b>Encaixotadeira da Batata.</b> Informada (A13), sem capacidade na base. Não calculada.</li>
+        <li><b>Premissas do simulador.</b> A embalagem trabalha as mesmas horas da linha; kg/h por máquina vem da coluna MAX (4 pessoas) quando existe, senão BPM (3 pessoas), ponderado pelo mix de kg out/26 (BPM BASE!I5:I74); fardos por kg é fixo no mix do PMP.</li>
+      </ol>
+    </div>
+  </section>
+
+  <p class="foot">Sem OEE: não há apontamento de paradas na base; paradas aqui são as horas planejadas do PMP. Necessidade não é editável neste simulador — muda só na MEMORIA DE CALCULO.</p>
+</div>
+<script>
+const DATA={"diasMes": [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31], "diasUteis": [20, 20, 22, 21, 20, 22, 22, 22, 21, 20, 20, 23], "nec": {"ext": [609257.37, 672054.7770000001, 671877.8274282222, 555650.3449999999, 551789.3659999999, 583163.1359999999, 611857.8809999999, 647211.4619999999, 633202.0179999999, 587969, 569491.8888888889, 569491.8888888889], "bat": [572637.39, 649470.817, 666340.241, 528426.256, 614744.29, 605413.001, 587505.903, 599820.2270000001, 464494.872, 539032, 477003, 477003], "pel": [29549.44, 29714.42, 31735.989999999998, 26763.989999999998, 31282.859999999997, 29692.949999999997, 31462.52999999999, 32074.989999999994, 28957.319999999996, 16234, 25608.11111111111, 25608.11111111111], "tor": [44770.266, 46000.642, 60248.057, 46206.512, 52582.427, 46792.636000000006, 50891.87100000001, 46951.277, 45639.764, 15783, 36414.666666666664, 36414.666666666664], "pip": [24923.760000000002, 32022.912, 25784.168, 28229.152000000002, 29532.864000000005, 28829.655999999995, 29259.336, 25188.904000000002, 29459.504, 31073, 22935.777777777777, 22935.777777777777], "mas": [41879.952000000005, 42518.16, 43424.504, 43697.072, 46474.828, 44276.556, 38317.732, 36107.272000000004, 30546.22, 35422, 35473.555555555555, 35473.555555555555]}, "capRef": {"ext": 12577171.200000001, "bat": 9084016.393442623, "pel": 504567.4075202169, "tor": 702500.4715918784, "pip": 817625.6827130702, "mas": 589200.4083021437}, "capRefMes": {"ext": [1069612.8, 958963.2, 1069612.8, 1032729.6, 1069612.8, 1032729.6, 1069612.8, 1069612.8, 1032729.6, 1069612.8, 1032729.6, 1069612.8], "bat": [772540.9836065575, 692622.9508196722, 772540.9836065575, 745901.6393442623, 772540.9836065575, 745901.6393442623, 772540.9836065575, 772540.9836065575, 745901.6393442623, 772540.9836065575, 745901.6393442623, 772540.9836065575], "pel": [39716.68671854774, 39716.68671854774, 44019.327779723746, 41868.00724913574, 39716.68671854774, 44019.327779723746, 44019.327779723746, 44019.327779723746, 41868.00724913574, 39716.68671854774, 39716.68671854774, 46170.64831031175], "tor": [55193.31172154922, 55193.31172154922, 61374.962634362724, 58284.13717795597, 55193.31172154922, 61374.962634362724, 61374.962634362724, 61374.962634362724, 58284.13717795597, 55193.31172154922, 55193.31172154922, 64465.78809076948], "pip": [64366.27714975231, 64366.27714975231, 71324.79359837419, 67845.53537406326, 64366.27714975231, 71324.79359837419, 71324.79359837419, 71324.79359837419, 67845.53537406326, 64366.27714975231, 64366.27714975231, 74804.05182268513], "mas": [46158.557332426, 46158.557332426, 51588.975842123175, 48873.766587274586, 46158.557332426, 51588.975842123175, 51588.975842123175, 51588.975842123175, 48873.766587274586, 46158.557332426, 46158.557332426, 54304.18509697176]}, "v": {"ext": 1536.8, "bat": 1109.9726775956285, "pel": 206.85774332576946, "tor": 551.9331172154922, "pip": 217.4536390194335, "mas": 339.4011568560735}, "h": {"ext": 24, "bat": 24, "pel": 16, "tor": 16, "pip": 16, "mas": 8}, "par": {"ext": 48, "bat": 48, "pel": 16, "tor": 12, "pip": 24, "mas": 24}, "k": {"ext": 509.1592380472002, "bat": 863.1293304310851, "pel": 300.5056571463519, "tor": 441.3172092371308, "mas": 297.52941027687535, "pip": 177.50013532137785, "pt": 365.045951966271}, "Kbase": {"pel": 20473.199999999997, "tor": 25442.160000000003}, "emp": {"ext": 7, "bat": 6, "pt": 3, "mas": 3, "pip": 2}, "enf": {"ext": {"n": 4, "cf": 539.9999999999999, "dem": 1606.0516096805002, "vref": 1536.8}, "pip": {"n": 2, "cf": 129.5621937602308, "dem": 183.45744152907193, "vref": 217.4536390194335}}, "capFab": 24275081.563569933, "necFab": 15716074.673428223, "garg": {"ext": 0.4311870250746684, "bat": 0.21433108543947074, "pt": 0.6928724602607211, "mas": 0.3802438180707728, "pip": 0.6125449950382198, "enfext": 0.7435424118891206, "enfpip": 0.7079898703651941}};
+// ===== MODELO (puro, sem DOM) =====
+
+const MESES=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+const PRODS={
+  ext:{nome:'Extrusado',grp:'ext',regime:'corridos',share:1},
+  bat:{nome:'Batata',grp:'bat',regime:'corridos',share:1},
+  pel:{nome:'Pellet',grp:'pt',regime:'uteis',share:0.65},
+  tor:{nome:'Tortilha',grp:'pt',regime:'uteis',share:0.35},
+  mas:{nome:'Massinha',grp:'mas',regime:'uteis',share:1},
+  pip:{nome:'Pipoca',grp:'pip',regime:'uteis',share:1}
+};
+const GRUPOS={
+  ext:{nome:'Extrusado',prods:['ext'],etapaLinha:'Linha (extrusão)'},
+  bat:{nome:'Batata',prods:['bat'],etapaLinha:'Linha (batata)'},
+  pt:{nome:'Pellet + Tortilha',prods:['pel','tor'],etapaLinha:'Linha (compartilhada)'},
+  mas:{nome:'Massinha',prods:['mas'],etapaLinha:'Linha (massinha)'},
+  pip:{nome:'Pipoca',prods:['pip'],etapaLinha:'Linha (pipoca)'}
+};
+const GORDEM=['ext','bat','pt','mas','pip'];
+const PORDEM=['ext','bat','pel','tor','mas','pip'];
+
+function estadoPMP(D){
+  const prod={};
+  for(const id of PORDEM) prod[id]={v:D.v[id],k:D.k[id],h:D.h[id],pOv:null,dOv:{}};
+  const grp={};
+  for(const g of GORDEM){
+    const e=D.enf[g];
+    grp[g]={nEmp:D.emp[g],nEnf:e?e.n:0,cf:e?e.cf:0};
+  }
+  return {prod,grp,scen:{red:0,dm:0,alvo:'todas',tipo:'emp'}};
+}
+function diasCal(D,id,m){const p=PRODS[id];return (p.regime==='corridos'?D.diasMes[m]:D.diasUteis[m])*p.share;}
+function alvoOk(st,g){return st.scen.alvo==='todas'||st.scen.alvo===g;}
+
+
+function calcProdMes(D,st,id,m,semCenario){
+  const s=st.prod[id], g=PRODS[id].grp;
+  const dias=(s.dOv[m]!=null)?s.dOv[m]:diasCal(D,id,m);
+  const hb=dias*s.h;
+  const pPad=hb>0?Math.min(1,D.par[id]/hb):0;
+  const p=(s.pOv!=null)?s.pOv:pPad;
+  const hd=hb*(1-p);
+  const red=(!semCenario&&alvoOk(st,g))?st.scen.red:0;
+  const v=s.v*(1-red);
+  return {dias,h:s.h,hb,p,pPad,hd,v,capL:v*hd,nec:D.nec[id][m]};
+}
+function kComb(D,st,g){
+  const ps=GRUPOS[g].prods;
+  if(ps.length===1) return st.prod[ps[0]].k;
+  let num=0,den=0;
+  for(const id of ps){num+=D.Kbase[id];den+=D.Kbase[id]/st.prod[id].k;}
+  return num/den;
+}
+function fpk(D,g){const e=D.enf[g];return e?e.dem/e.vref:0;} // fardos por kg (mix do PMP)
+
+function calcGrupoMes(D,st,g,m,semCenario){
+  const ps=GRUPOS[g].prods.map(id=>({id,...calcProdMes(D,st,id,m,semCenario)}));
+  const G=st.grp[g];
+  const dm=(!semCenario&&alvoOk(st,g))?st.scen.dm:0;
+  const nEmp=Math.max(0,G.nEmp+(st.scen.tipo==='emp'?dm:0));
+  const temEnf=!!D.enf[g];
+  const nEnf=temEnf?Math.max(0,G.nEnf+(st.scen.tipo==='enf'?dm:0)):0;
+  const capL=ps.reduce((a,p)=>a+p.capL,0);
+  const nec=ps.reduce((a,p)=>a+p.nec,0);
+  const hd=ps.reduce((a,p)=>a+p.hd,0);
+  const hb=ps.reduce((a,p)=>a+p.hb,0);
+  const vSoma=ps.reduce((a,p)=>a+p.v,0);
+
+  const k=kComb(D,st,g);
+  const rateEmp=k*nEmp;
+  const cargaEmp=vSoma>0?(rateEmp>0?vSoma/rateEmp:Infinity):0;
+  const capEmp=cargaEmp===Infinity?0:(cargaEmp>0?capL/cargaEmp:0);
+  let cargaEnf=null,capEnf=null,rateEnf=null;
+  if(temEnf){
+    rateEnf=G.cf*nEnf/fpk(D,g); // kg/h equivalentes
+    cargaEnf=vSoma>0?(rateEnf>0?vSoma/rateEnf:Infinity):0;
+    capEnf=cargaEnf===Infinity?0:(cargaEnf>0?capL/cargaEnf:0);
+  }
+  return {g,ps,nEmp,nEnf,capL,nec,hd,hb,vSoma,k,rateEmp,cargaEmp,capEmp,rateEnf,cargaEnf,capEnf,temEnf};
+}
+function fechar(r){
+  const et=[{id:'linha',cap:r.capL},{id:'emp',cap:r.capEmp}];
+  if(r.temEnf) et.push({id:'enf',cap:r.capEnf});
+  let lim=et[0];for(const e of et) if(e.cap<lim.cap-1e-9) lim=e;
+  r.etapas=et;r.lim=lim.id;r.capEf=lim.cap;
+  r.atend=r.nec>0?r.capEf/r.nec:(r.capEf>0?Infinity:1);
+  r.ocup=r.capEf>0?r.nec/r.capEf:Infinity;
+  r.saldo=r.capEf-r.nec;
+  return r;
+}
+function calcGrupo(D,st,g,periodo,semCenario){
+  if(periodo!=='ano') return fechar(calcGrupoMes(D,st,g,periodo,semCenario));
+  const ms=MESES.map((_,m)=>calcGrupoMes(D,st,g,m,semCenario));
+  const soma=f=>ms.reduce((a,x)=>a+(x[f]||0),0);
+  const r={...ms[0]};
+  for(const f of ['capL','nec','hd','hb','capEmp']) r[f]=soma(f);
+  if(r.temEnf) r.capEnf=soma('capEnf');
+  r.ps=ms[0].ps.map((p,i)=>{
+    const q={id:p.id,v:p.v,h:p.h};
+    for(const f of ['dias','hb','hd','capL','nec']) q[f]=ms.reduce((a,x)=>a+x.ps[i][f],0);
+
+    q.p=q.hb>0?1-q.hd/q.hb:0;
+    return q;
+  });
+  r.meses=ms;
+  // capacidade efetiva anual = soma dos mínimos mensais
+  fechar(r);
+  const efM=ms.map(x=>fechar({...x}).capEf);
+  r.capEf=efM.reduce((a,b)=>a+b,0);
+  r.atend=r.nec>0?r.capEf/r.nec:1; r.ocup=r.capEf>0?r.nec/r.capEf:Infinity; r.saldo=r.capEf-r.nec;
+  return r;
+}
+function calcFabrica(D,st,periodo,semCenario){
+  const gs=GORDEM.map(g=>calcGrupo(D,st,g,periodo,semCenario));
+  const cap=gs.reduce((a,x)=>a+x.capEf,0), nec=gs.reduce((a,x)=>a+x.nec,0);
+  let gar=gs[0];for(const x of gs) if(x.atend<gar.atend) gar=x;
+  return {gs,cap,nec,saldo:cap-nec,atend:nec>0?cap/nec:1,gar};
+}
+
+// ===== INTERFACE =====
+const D=DATA;
+let st=estadoPMP(D);
+let periodo='ano';
+let foco='ext';
+const $=s=>document.querySelector(s);
+const nf0=new Intl.NumberFormat('pt-BR',{maximumFractionDigits:0});
+const nf1=new Intl.NumberFormat('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1});
+const nf2=new Intl.NumberFormat('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const kg=x=>isFinite(x)?nf0.format(x)+' kg':'—';
+const pc=x=>isFinite(x)?nf1.format(x*100)+'%':'—';
+const mi=x=>nf2.format(x/1e6)+' mi';
+const nomePer=p=>p==='ano'?'ano de 2027':MESES[p]+'/2027';
+const NOME_ETAPA={linha:'Linha',emp:'Empacotamento',enf:'Enfardamento'};
+
+function sem(a){ if(!isFinite(a)) return {c:'ok',t:'Atende'}; if(a>=1) return {c:'ok',t:'Atende'}; if(a>=0.95) return {c:'at',t:'Atenção'}; return {c:'no',t:'Não atende'}; }
+function parse(s){ s=String(s).trim().replace(/\s|%/g,''); if(s==='') return null; if(s.includes(',')) s=s.replace(/\./g,'').replace(',','.'); const x=Number(s); return isFinite(x)?x:NaN; }
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+// ---------- editor ----------
+const CAMPOS=[
+ {k:'v',rot:'Vazão da linha',un:'kg/h',dec:1,nivel:'prod'},
+ {k:'k',rot:'kg/h por máquina',un:'kg/h',dec:1,nivel:'prod'},
+ {k:'nEmp',rot:'Empacotadeiras',un:'nº',dec:0,nivel:'grp'},
+ {k:'nEnf',rot:'Enfardadeiras',un:'nº',dec:0,nivel:'grp'},
+ {k:'cf',rot:'Fardos/h por enfardadeira',un:'fardos/h',dec:1,nivel:'grp'},
+ {k:'h',rot:'Horas/dia',un:'h',dec:1,nivel:'prod'},
+ {k:'dias',rot:'Dias no período',un:'dias',dec:2,nivel:'prod'},
+ {k:'p',rot:'Paradas',un:'%',dec:2,nivel:'prod'}
+];
+function montarEditor(){
+  const box=$('#editor'); let h='<div class="erow ehead" aria-hidden="true"><div>Linha</div>';
+  for(const c of CAMPOS) h+=`<div>${c.rot}<small>${c.un}</small></div>`;
+  h+='</div>';
+  for(const id of PORDEM){
+    const P=PRODS[id], g=P.grp, comp=g==='pt';
+    h+=`<div class="erow${comp?' comp':''}" data-p="${id}"><div class="ename">${P.nome}${comp?'<small>linha compartilhada Pellet + Tortilha</small>':''}</div>`;
+    for(const c of CAMPOS){
+      let inner='';
+      if(c.nivel==='grp'){
+        const temEnf=!!D.enf[g];
+        if(comp&&id==='tor') inner='<span class="na">compartilhadas com Pellet</span>';
+        else if((c.k==='nEnf'||c.k==='cf')&&!temEnf) inner=`<span class="na">${c.k==='cf'?'—':g==='bat'?'1 encaixotadeira · sem capacidade na base':'sem enfardadeira na base'}</span>`;
+        else inner=`<input inputmode="decimal" data-n="grp" data-g="${g}" data-k="${c.k}" aria-label="${c.rot} · ${GRUPOS[g].nome}">`;
+      } else inner=`<input inputmode="decimal" data-n="prod" data-id="${id}" data-k="${c.k}" aria-label="${c.rot} · ${P.nome}">`;
+      h+=`<label class="ecell"><span class="elbl">${c.rot} <small>${c.un}</small></span>${inner}</label>`;
+    }
+
+    h+='</div>';
+  }
+  box.innerHTML=h;
+  box.querySelectorAll('input').forEach(inp=>{
+    inp.addEventListener('input',()=>aoEditar(inp));
+    inp.addEventListener('blur',()=>preencherEditor(inp));
+  });
+}
+function valorCampo(inp){
+  const k=inp.dataset.k;
+  if(inp.dataset.n==='grp'){const G=st.grp[inp.dataset.g];return {val:G[k],dec:k==='cf'?1:0,pad:false};}
+  const id=inp.dataset.id,s=st.prod[id];
+  if(k==='dias'){
+    if(periodo==='ano'){let t=0;for(let m=0;m<12;m++) t+=(s.dOv[m]!=null?s.dOv[m]:diasCal(D,id,m));return {val:t,dec:2,pad:true,ro:true};}
+    const ov=s.dOv[periodo]; return {val:ov!=null?ov:diasCal(D,id,periodo),dec:2,pad:ov==null};
+  }
+  if(k==='p'){
+    if(s.pOv!=null) return {val:s.pOv*100,dec:2,pad:false};
+    const r=periodo==='ano'?calcGrupo(D,st,PRODS[id].grp,'ano',true).ps.find(x=>x.id===id):calcProdMes(D,st,id,periodo,true);
+    return {val:r.p*100,dec:2,pad:true};
+  }
+  return {val:s[k],dec:k==='h'?1:2,pad:false};
+}
+function fmtIn(x,dec){return new Intl.NumberFormat('pt-BR',{maximumFractionDigits:dec,useGrouping:false}).format(x);}
+function preencherEditor(only){
+  const list=only?[only]:document.querySelectorAll('#editor input');
+  list.forEach(inp=>{
+    if(!only&&document.activeElement===inp) return;
+    const r=valorCampo(inp);
+    inp.value=fmtIn(r.val,r.dec);
+    inp.classList.toggle('pad',!!r.pad);
+    inp.readOnly=!!r.ro; inp.classList.toggle('ro',!!r.ro);
+
+    inp.title=r.ro?'No ano, os dias são a soma dos meses. Escolha um mês para editar.':(inp.dataset.k==='p'&&r.pad?'Padrão do PMP: horas de parada da MEMORIA DE CALCULO convertidas em %. Apague para voltar ao padrão.':'');
+    inp.classList.remove('bad');
+  });
+}
+function aoEditar(inp){
+  const x=parse(inp.value), k=inp.dataset.k;
+  const inteiro=(k==='nEmp'||k==='nEnf');
+  if(x===null){ // campo vazio: volta ao padrão quando existe padrão
+    if(inp.dataset.n==='prod'&&k==='p'){st.prod[inp.dataset.id].pOv=null;inp.classList.remove('bad');atualizar();return;}
+    if(inp.dataset.n==='prod'&&k==='dias'&&periodo!=='ano'){delete st.prod[inp.dataset.id].dOv[periodo];inp.classList.remove('bad');atualizar();return;}
+    inp.classList.add('bad');return;
+  }
+  if(isNaN(x)||x<0||(k==='p'&&x>=100)||(k==='h'&&x>24)||(inteiro&&!Number.isInteger(x))){inp.classList.add('bad');return;}
+  inp.classList.remove('bad');
+  if(inp.dataset.n==='grp') st.grp[inp.dataset.g][k]=x;
+  else{
+    const s=st.prod[inp.dataset.id];
+    if(k==='p') s.pOv=x/100; else if(k==='dias'){ if(periodo!=='ano') s.dOv[periodo]=x; } else s[k]=x;
+  }
+  inp.classList.remove('pad');
+  atualizar();
+}
+
+// ---------- render ----------
+function renderHero(F,F0){
+  const g=F.gar, s=sem(g.atend);
+  const lim=NOME_ETAPA[g.lim]; 
+  $('#hero').innerHTML=`
+   <div class="hmain">
+     <p class="hk">Gargalo da fábrica no ${nomePer(periodo)}</p>
+     <h2>${GRUPOS[g.g].nome}</h2>
+     <p class="hs">Atendimento de <b class="s-${s.c}">${pc(g.atend)}</b> da necessidade, limitado ${g.lim==='linha'?'pela <b class="og">própria linha</b>':g.lim==='emp'?'pelo <b class="og">empacotamento</b>':'pelo <b class="og">enfardamento</b>'}.</p>
+
+   </div>
+   <dl class="hstats">
+     <div><dt>Capacidade efetiva da fábrica</dt><dd>${kg(F.cap)}</dd></div>
+     <div><dt>Necessidade do PMP</dt><dd>${kg(F.nec)}</dd></div>
+     <div><dt>Saldo</dt><dd class="${F.saldo<0?'s-no':''}">${kg(F.saldo)}</dd></div>
+     <div><dt>Atendimento da fábrica</dt><dd><span class="pill s-${sem(F.atend).c}">${pc(F.atend)} · ${sem(F.atend).t}</span></dd></div>
+     <div><dt>Variação da capacidade vs. PMP</dt><dd>${(F.cap-F0.cap>=0?'+':'')+kg(F.cap-F0.cap)} <small>(${(F.cap/F0.cap-1>=0?'+':'')+pc(F.cap/F0.cap-1)})</small></dd></div>
+   </dl>`;
+}
+function barra(oc){ // oc = necessidade ÷ capacidade da etapa
+  const w=isFinite(oc)?Math.min(oc,1.5)/1.5*100:100;
+  const a=isFinite(oc)&&oc>0?1/oc:0; const s=sem(oc<=0?Infinity:a);
+  return `<div class="bar"><i class="f s-bg-${s.c}" style="width:${w}%"></i><i class="cem" style="left:${100/1.5}%"></i></div>`;
+}
+function renderCards(F){
+  let h='';
+  for(const r of F.gs){
+    const s=sem(r.atend), isG=r.g===F.gar.g;
+    h+=`<article class="card lcard${isG?' isgar':''}${foco===r.g?' foco':''}" data-g="${r.g}" tabindex="0" aria-label="Ver memória de cálculo de ${GRUPOS[r.g].nome}">
+      <header><h3>${GRUPOS[r.g].nome}</h3>${isG?'<span class="tag">gargalo da fábrica</span>':''}<span class="pill s-${s.c}">${pc(r.atend)} · ${s.t}</span></header>
+      <div class="kv"><span>Capacidade efetiva</span><b>${kg(r.capEf)}</b></div>
+      <div class="kv"><span>Necessidade</span><b>${kg(r.nec)}</b></div>
+      <div class="kv"><span>Ocupação</span><b>${pc(r.ocup)}</b></div>
+      <ol class="fluxo">`;
+    for(const e of r.etapas){
+      const oc=e.cap>0?r.nec/e.cap:Infinity, lim=e.id===r.lim;
+      const carga=e.id==='emp'?r.cargaEmp:e.id==='enf'?r.cargaEnf:null;
+      h+=`<li class="${lim?'lim':''}"><div class="et"><span>${e.id==='linha'?GRUPOS[r.g].etapaLinha:NOME_ETAPA[e.id]}</span>${lim?'<em>limita</em>':''}<b>${pc(oc)}</b></div>${barra(oc)}
+        <div class="sub">${kg(e.cap)}${carga!=null?` · na vazão da linha: ${pc(carga)}`:''}</div></li>`;
+    }
+    h+='</ol></article>';
+  }
+
+  $('#cards').innerHTML=h;
+  document.querySelectorAll('.lcard').forEach(c=>{
+    const f=()=>{foco=c.dataset.g;atualizar();document.getElementById('memoria').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});};
+    c.addEventListener('click',f); c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();f();}});
+  });
+}
+function renderGrafico(F){
+  const W=640,H=300,ml=56,mb=46,mt=16,mr=8;
+  const max=Math.max(...F.gs.map(r=>Math.max(r.capEf,r.nec)))*1.08||1;
+  const pw=(W-ml-mr)/F.gs.length, bw=Math.min(34,pw*0.3);
+  const y=v=>mt+(H-mt-mb)*(1-v/max);
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Capacidade efetiva e necessidade por linha, ${nomePer(periodo)}">`;
+  for(let i=0;i<=4;i++){const v=max*i/4;s+=`<line x1="${ml}" x2="${W-mr}" y1="${y(v)}" y2="${y(v)}" class="gl"/><text x="${ml-6}" y="${y(v)+4}" class="ax" text-anchor="end">${nf1.format(v/1e6)}</text>`;}
+  s+=`<text x="${ml-6}" y="${H-mb+18}" class="ax" text-anchor="end">mi kg</text>`;
+  F.gs.forEach((r,i)=>{
+    const cx=ml+pw*i+pw/2, isG=r.g===F.gar.g;
+    s+=`<rect x="${cx-bw-2}" y="${y(r.capEf)}" width="${bw}" height="${H-mb-y(r.capEf)}" class="bc" rx="2"><title>Capacidade efetiva: ${kg(r.capEf)}</title></rect>`;
+    s+=`<rect x="${cx+2}" y="${y(r.nec)}" width="${bw}" height="${H-mb-y(r.nec)}" class="bn" rx="2"><title>Necessidade: ${kg(r.nec)}</title></rect>`;
+    s+=`<text x="${cx}" y="${H-mb+18}" text-anchor="middle" class="xl${isG?' xg':''}">${GRUPOS[r.g].nome.replace(' + ','+')}</text>`;
+    s+=`<text x="${cx}" y="${H-mb+34}" text-anchor="middle" class="xs s-${sem(r.atend).c}">${pc(r.atend)}</text>`;
+  });
+  s+=`<line x1="${ml}" x2="${W-mr}" y1="${H-mb}" y2="${H-mb}" class="base"/></svg>`;
+  $('#grafico').innerHTML=s;
+}
+function renderMapa(){
+  let h='<table class="mapa"><thead><tr><th scope="col">Linha</th>';
+  MESES.forEach((m,i)=>h+=`<th scope="col"><button data-per="${i}" class="${periodo===i?'on':''}">${m}</button></th>`);
+  h+=`<th scope="col"><button data-per="ano" class="${periodo==='ano'?'on':''}">Ano</button></th></tr></thead><tbody>`;
+  const anual=calcFabrica(D,st,'ano');
+  const porMes=MESES.map((_,m)=>calcFabrica(D,st,m));
+  GORDEM.forEach((g,gi)=>{
+    h+=`<tr><th scope="row">${GRUPOS[g].nome}</th>`;
+
+    porMes.forEach((F,m)=>{const r=F.gs[gi],s=sem(r.atend);h+=`<td class="c-${s.c}${periodo===m?' on':''}${F.gar.g===g?' gm':''}" title="${GRUPOS[g].nome} · ${MESES[m]}: ${pc(r.atend)}">${nf0.format(r.atend*100)}</td>`;});
+    const r=anual.gs[gi],s=sem(r.atend);h+=`<td class="c-${s.c}${periodo==='ano'?' on':''}${anual.gar.g===g?' gm':''}">${nf0.format(r.atend*100)}</td></tr>`;
+  });
+  h+='</tbody></table>';
+  $('#mapa').innerHTML=h;
+  $('#mapa').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>setPeriodo(b.dataset.per==='ano'?'ano':+b.dataset.per)));
+}
+function renderMemoria(F){
+  const r=F.gs.find(x=>x.g===foco), anual=periodo==='ano';
+  const tabs=GORDEM.map(g=>`<button class="${g===foco?'on':''}" data-g="${g}">${GRUPOS[g].nome}</button>`).join('');
+  let h=`<div class="tabs" role="tablist">${tabs}</div><div class="mem">`;
+  const pre=anual?'Σ dos 12 meses de ':'';
+  for(const p of r.ps){
+    const nm=PRODS[p.id].nome, red=(alvoOk(st,PRODS[p.id].grp)?st.scen.red:0);
+    h+=`<h4>${nm}</h4>
+    <p><span class="fx">Horas disponíveis = ${pre}dias × horas/dia × (1 − paradas)</span>
+       <span class="nx">= ${nf2.format(p.dias)} × ${nf1.format(p.h)} × (1 − ${nf2.format(p.p*100)}%) = <b>${nf1.format(p.hd)} h</b></span></p>
+    <p><span class="fx">Vazão considerada = vazão da linha × (1 − redução do cenário)</span>
+       <span class="nx">= ${nf1.format(st.prod[p.id].v)} × (1 − ${nf0.format(red*100)}%) = <b>${nf1.format(p.v)} kg/h</b></span></p>
+    <p><span class="fx">Capacidade da linha = vazão × horas disponíveis</span>
+       <span class="nx">= ${nf1.format(p.v)} × ${nf1.format(p.hd)} = <b>${kg(p.capL)}</b></span></p>`;
+  }
+  if(r.ps.length>1){
+    h+=`<h4>Linha compartilhada</h4>
+    <p><span class="fx">kg/h por máquina combinado = (kg Pellet + kg Tortilha) ÷ (kg Pellet ÷ kg/h Pellet + kg Tortilha ÷ kg/h Tortilha)</span>
+      <span class="nx">= (${nf0.format(D.Kbase.pel)} + ${nf0.format(D.Kbase.tor)}) ÷ (${nf0.format(D.Kbase.pel)} ÷ ${nf1.format(st.prod.pel.k)} + ${nf0.format(D.Kbase.tor)} ÷ ${nf1.format(st.prod.tor.k)}) = <b>${nf1.format(r.k)} kg/h</b></span></p>
+    <p><span class="fx">Vazão somada (método da aba GARGALO EMBALAGEM, B12) = vazão Pellet + vazão Tortilha</span>
+      <span class="nx">= <b>${nf1.format(r.vSoma)} kg/h</b></span></p>`;
+  }
+  h+=`<h4>Etapas</h4>
+   <p><span class="fx">Carga do empacotamento = vazão ÷ (kg/h por máquina × nº de empacotadeiras)</span>
+     <span class="nx">= ${nf1.format(r.vSoma)} ÷ (${nf1.format(r.k)} × ${r.nEmp}) = <b>${pc(r.cargaEmp)}</b></span></p>
+
+   <p><span class="fx">Capacidade do empacotamento = capacidade da linha ÷ carga do empacotamento</span>
+     <span class="nx">= ${kg(r.capL)} ÷ ${pc(r.cargaEmp)} = <b>${kg(r.capEmp)}</b></span>
+     ${r.ps.length===1?`<span class="nt">equivale a kg/h por máquina × nº de empacotadeiras × horas disponíveis = ${nf1.format(r.k)} × ${r.nEmp} × ${nf1.format(r.hd)}</span>`:''}</p>`;
+  if(r.temEnf){
+    const fk=fpk(D,r.g);
+    h+=`<p><span class="fx">Capacidade horária do enfardamento (kg/h) = fardos/h por enfardadeira × nº de enfardadeiras ÷ fardos por kg</span>
+     <span class="nx">= ${nf1.format(st.grp[r.g].cf)} × ${r.nEnf} ÷ ${nf2.format(fk)} = <b>${nf1.format(r.rateEnf)} kg/h</b></span>
+     <span class="nt">fardos por kg = demanda de fardos/h ÷ vazão do PMP = ${nf1.format(D.enf[r.g].dem)} ÷ ${nf1.format(D.enf[r.g].vref)} (mix de SKUs do PMP, fixo)</span></p>
+    <p><span class="fx">Capacidade do enfardamento = capacidade da linha ÷ (vazão ÷ capacidade horária do enfardamento)</span>
+     <span class="nx">= ${kg(r.capL)} ÷ ${pc(r.cargaEnf)} = <b>${kg(r.capEnf)}</b></span></p>`;
+  } else h+=`<p class="nt">Enfardamento não calculado para ${GRUPOS[r.g].nome}: ${r.g==='bat'?'a base traz 1 encaixotadeira sem capacidade informada.':r.g==='pt'?'há SKUs de Pellet em fardo, mas nenhuma enfardadeira listada na aba GARGALO EMBALAGEM.':'a linha não tem enfardadeira na base.'}</p>`;
+  h+=`<p><span class="fx">Capacidade efetiva = menor capacidade entre as etapas${anual?' (somada mês a mês)':''}</span>
+     <span class="nx">= <b>${kg(r.capEf)}</b> · limitada por ${NOME_ETAPA[r.lim].toLowerCase()}</span></p>
+   <p><span class="fx">Atendimento = capacidade efetiva ÷ necessidade</span>
+     <span class="nx">= ${kg(r.capEf)} ÷ ${kg(r.nec)} = <b class="s-${sem(r.atend).c}">${pc(r.atend)}</b></span></p>
+   <p><span class="fx">Ocupação = necessidade ÷ capacidade efetiva</span>
+     <span class="nx">= <b>${pc(r.ocup)}</b></span></p></div>`;
+  $('#memoria-corpo').innerHTML=h;
+  $('#memoria-corpo').querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{foco=b.dataset.g;atualizar();}));
+}
+function renderConferencia(){
+  const st0=estadoPMP(D); let h='', ok=true;
+  for(const id of PORDEM){
+    const r=calcGrupo(D,st0,PRODS[id].grp,'ano',true).ps.find(x=>x.id===id);
+    const d=r.capL-D.capRef[id]; if(Math.abs(d)>0.5) ok=false;
+    h+=`<tr><td>${PRODS[id].nome}</td><td>${kg(D.capRef[id])}</td><td>${kg(r.capL)}</td><td>${nf0.format(d)}</td></tr>`;
+  }
+  const F=calcFabrica(D,st0,'ano',true);
+  h+=`<tr class="tot"><td>Fábrica</td><td>${kg(D.capFab)}</td><td>${kg(F.cap)}</td><td>${nf0.format(F.cap-D.capFab)}</td></tr>
+      <tr class="tot"><td>Necessidade</td><td>${kg(D.necFab)}</td><td>${kg(F.nec)}</td><td>${nf0.format(F.nec-D.necFab)}</td></tr>`;
+  $('#conf').innerHTML=h; $('#confok').textContent=ok?'Com os valores do PMP, o simulador reproduz a planilha sem diferença.':'Atenção: há diferença entre o simulador e a planilha.';
+}
+
+function avisos(){
+  const a=[];
+  if(periodo!=='ano'){
+    const dp=st.prod.pel.dOv[periodo]!=null?st.prod.pel.dOv[periodo]:diasCal(D,'pel',periodo);
+    const dt=st.prod.tor.dOv[periodo]!=null?st.prod.tor.dOv[periodo]:diasCal(D,'tor',periodo);
+    if(dp+dt>D.diasUteis[periodo]+1e-9) a.push(`Pellet + Tortilha somam ${nf2.format(dp+dt)} dias em ${MESES[periodo]}, acima dos ${D.diasUteis[periodo]} dias úteis do mês (linha compartilhada).`);
+  }
+  if(st.scen.tipo==='enf'&&st.scen.dm!==0){
+    const semEnf=GORDEM.filter(g=>alvoOk(st,g)&&!D.enf[g]).map(g=>GRUPOS[g].nome);
+    if(semEnf.length) a.push(`Máquinas a mais/menos em enfardadeiras não se aplicam a ${semEnf.join(', ')}: não há enfardadeira com capacidade na base.`);
+  }
+  $('#avisos').innerHTML=a.map(x=>`<p>${esc(x)}</p>`).join(''); $('#avisos').hidden=!a.length;
+}
+function atualizar(){
+  const F=calcFabrica(D,st,periodo), F0=calcFabrica(D,estadoPMP(D),periodo,true);
+  renderHero(F,F0); renderCards(F); renderGrafico(F); renderMapa(); renderMemoria(F); avisos(); preencherEditor();
+  const ativo=st.scen.red!==0||st.scen.dm!==0;
+  $('#cen-tag').hidden=!ativo;
+  $('#redv').textContent=nf0.format(st.scen.red*100)+'%';
+  $('#dmv').textContent=(st.scen.dm>0?'+':'')+st.scen.dm;
+  document.querySelectorAll('#periodos button').forEach(b=>b.classList.toggle('on',(b.dataset.per==='ano'?'ano':+b.dataset.per)===periodo));
+  $('#per-sel').value=String(periodo);
+  $('#lbl-per').textContent=nomePer(periodo);
+}
+function setPeriodo(p){periodo=p;atualizar();}
+function restaurar(){
+  st=estadoPMP(D);
+  $('#red').value=0;$('#dm').value=0;$('#alvo').value='todas';$('#tipo').value='emp';
+  atualizar();
+}
+function init(){
+  let pb=`<button data-per="ano">Ano 2027</button>`+MESES.map((m,i)=>`<button data-per="${i}">${m}</button>`).join('');
+
+  $('#periodos').innerHTML=pb;
+  $('#periodos').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>setPeriodo(b.dataset.per==='ano'?'ano':+b.dataset.per)));
+  $('#per-sel').innerHTML=`<option value="ano">Ano 2027</option>`+MESES.map((m,i)=>`<option value="${i}">${m}/2027</option>`).join('');
+  $('#per-sel').addEventListener('change',e=>setPeriodo(e.target.value==='ano'?'ano':+e.target.value));
+  $('#alvo').innerHTML=`<option value="todas">Todas as linhas</option>`+GORDEM.map(g=>`<option value="${g}">${GRUPOS[g].nome}</option>`).join('');
+  $('#red').addEventListener('input',e=>{st.scen.red=+e.target.value/100;atualizar();});
+  $('#dm').addEventListener('input',e=>{st.scen.dm=+e.target.value;atualizar();});
+  $('#alvo').addEventListener('change',e=>{st.scen.alvo=e.target.value;atualizar();});
+  $('#tipo').addEventListener('change',e=>{st.scen.tipo=e.target.value;atualizar();});
+  $('#restaurar').addEventListener('click',restaurar);
+  montarEditor(); renderConferencia(); atualizar();
+}
+init();
+
+</script>
+</body>
+</html>
