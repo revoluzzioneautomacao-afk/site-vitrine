@@ -93,8 +93,8 @@ function desenhar(){
     const xExt = pad;
     roundRectExt(c, xExt, yExt, wExt, hExt);
     // silo ao lado
-    const xSilo = xExt + wExt + 18, wSilo = W*0.26, siloH = hExt + 46;
-    desenhaSilo(c, xSilo, yExt-6, wSilo, siloH, p[1]);
+    const xSilo = xExt + wExt + 18, wSilo = W*0.26, siloH = hExt + 54;
+    desenhaSilo(c, xSilo, yExt, wSilo, siloH, p[1]);
     // empacotadeiras: grade 4x2
     const yEmp = yExt + siloH + 42;
     titulo(c, pad, yEmp - 10, 'EMPACOTAMENTO  ' + nEmp + '/7', '#F88000');
@@ -186,7 +186,7 @@ function desenhaSilo(c,x,y,w,h,kg){
   c.fillStyle='#111F38'; c.fill(); c.strokeStyle='#2F4A75'; c.stroke();
   c.fillStyle='#C9D8EC'; c.font='700 10px -apple-system,Segoe UI,Roboto,Arial';
   c.textAlign='center'; c.textBaseline='alphabetic';
-  c.fillText('SILO', x+w/2, y-6);
+  c.fillText('SILO', x+w/2, y+16);
   c.fillStyle='#B78CFF'; c.font='700 11px -apple-system,Segoe UI,Roboto,Arial';
   c.fillText(kg.toLocaleString('pt-BR')+' kg', x+w/2, y+h+34);
 }
